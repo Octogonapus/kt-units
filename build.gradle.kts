@@ -37,7 +37,7 @@ val publishedProjects = setOf(
 val ktlintVersion = "0.29.0"
 val kotlinVersion = "1.3.30"
 val junitJupiterVersion = "5.2.0"
-val ktUnitsVersion = "0.1.0-SNAPSHOT"
+val ktUnitsVersion = "0.1.0"
 
 object Strings {
     const val spotlessLicenseHeaderDelimiter = "(@|package|import)"
