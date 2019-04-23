@@ -16,13 +16,10 @@
  */
 package org.octogonapus.ktunits.quantities
 
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
+import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityType
 
-internal class QuantitiesTest {
-
-    @Test
-    fun `basic test`() {
-        assertEquals(2.mps, 1.meter / 0.5.second)
-    }
-}
+@QuantityType(0, 2, 0, 0)
+data class Area(
+    override var value: Double
+) : Quantity(0, 2, 0, 0, value)

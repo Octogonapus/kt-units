@@ -19,34 +19,19 @@ package org.octogonapus.ktunits.quantities
 import org.octogonapus.ktunits.annotation.Quantity
 import org.octogonapus.ktunits.annotation.QuantityType
 
-val Number.meter
-    get() = Length(toDouble())
-
-val Number.centimeter
-    get() = Length(toDouble() / 100)
-
-@QuantityType(0, 1, 0, 0)
-data class Length(
-    override var value: Double
-) : Quantity(0, 1, 0, 0, value)
-
-@QuantityType(0, 2, 0, 0)
-data class Area(
-    override var value: Double
-) : Quantity(0, 2, 0, 0, value)
-
-val Number.second
-    get() = Time(toDouble())
+val Number.gigasecond get() = Time(toDouble() * 100000)
+val Number.megasecond get() = Time(toDouble() * 10000)
+val Number.kilosecond get() = Time(toDouble() * 1000)
+val Number.hectosecond get() = Time(toDouble() * 100)
+val Number.decasecond get() = Time(toDouble() * 10)
+val Number.second get() = Time(toDouble())
+val Number.decisecond get() = Time(toDouble() / 10)
+val Number.centisecond get() = Time(toDouble() / 100)
+val Number.millisecond get() = Time(toDouble() / 1000)
+val Number.microsecond get() = Time(toDouble() / 10000)
+val Number.nanosecond get() = Time(toDouble() / 100000)
 
 @QuantityType(0, 0, 1, 0)
 data class Time(
     override var value: Double
 ) : Quantity(0, 0, 1, 0, value)
-
-val Number.mps
-    get() = Velocity(toDouble())
-
-@QuantityType(0, 1, -1, 0)
-data class Velocity(
-    override var value: Double
-) : Quantity(0, 1, -1, 0, value)

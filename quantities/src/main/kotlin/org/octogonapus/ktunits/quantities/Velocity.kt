@@ -16,7 +16,13 @@
  */
 package org.octogonapus.ktunits.quantities
 
-fun main() {
-    val test: Velocity = 1.meter / 0.5.second
-    println(test)
-}
+import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityType
+
+val Number.mps
+    get() = Velocity(toDouble())
+
+@QuantityType(0, 1, -1, 0)
+data class Velocity(
+    override var value: Double
+) : Quantity(0, 1, -1, 0, value)
