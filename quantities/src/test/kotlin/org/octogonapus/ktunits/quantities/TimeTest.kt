@@ -35,8 +35,8 @@ internal class TimeTest {
         @Suppress("unused")
         @JvmStatic
         fun timeUnitsSource() = listOf(
-            Arguments.of(100000.second, 1.gigasecond),
-            Arguments.of(10000.second, 1.megasecond),
+            Arguments.of(1000000000.second, 1.gigasecond),
+            Arguments.of(1000000.second, 1.megasecond),
             Arguments.of(1000.second, 1.kilosecond),
             Arguments.of(100.second, 1.hectosecond),
             Arguments.of(10.second, 1.decasecond),
@@ -44,8 +44,8 @@ internal class TimeTest {
             Arguments.of(0.1.second, 1.decisecond),
             Arguments.of(0.01.second, 1.centisecond),
             Arguments.of(0.001.second, 1.millisecond),
-            Arguments.of(0.0001.second, 1.microsecond),
-            Arguments.of(0.00001.second, 1.nanosecond)
+            Arguments.of(0.000001.second, 1.microsecond),
+            Arguments.of(0.000000001.second, 1.nanosecond)
         )
     }
 }

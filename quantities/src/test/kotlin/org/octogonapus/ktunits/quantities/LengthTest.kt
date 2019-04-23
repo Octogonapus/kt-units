@@ -35,8 +35,8 @@ internal class LengthTest {
         @Suppress("unused")
         @JvmStatic
         fun lengthUnitsSource() = listOf(
-            Arguments.of(100000.meter, 1.gigameter),
-            Arguments.of(10000.meter, 1.megameter),
+            Arguments.of(1000000000.meter, 1.gigameter),
+            Arguments.of(1000000.meter, 1.megameter),
             Arguments.of(1000.meter, 1.kilometer),
             Arguments.of(100.meter, 1.hectometer),
             Arguments.of(10.meter, 1.decameter),
@@ -44,8 +44,8 @@ internal class LengthTest {
             Arguments.of(0.1.meter, 1.decimeter),
             Arguments.of(0.01.meter, 1.centimeter),
             Arguments.of(0.001.meter, 1.millimeter),
-            Arguments.of(0.0001.meter, 1.micrometer),
-            Arguments.of(0.00001.meter, 1.nanometer),
+            Arguments.of(0.000001.meter, 1.micrometer),
+            Arguments.of(0.000000001.meter, 1.nanometer),
             Arguments.of(0.9144.meter, 1.yard),
             Arguments.of(0.0254.meter, 1.inch),
             Arguments.of(0.3048.meter, 1.foot),

@@ -19,8 +19,8 @@ package org.octogonapus.ktunits.quantities
 import org.octogonapus.ktunits.annotation.Quantity
 import org.octogonapus.ktunits.annotation.QuantityType
 
-val Number.gigameter get() = Length(toDouble() * 100000)
-val Number.megameter get() = Length(toDouble() * 10000)
+val Number.gigameter get() = Length(toDouble() * 1000000000)
+val Number.megameter get() = Length(toDouble() * 1000000)
 val Number.kilometer get() = Length(toDouble() * 1000)
 val Number.hectometer get() = Length(toDouble() * 100)
 val Number.decameter get() = Length(toDouble() * 10)
@@ -28,8 +28,8 @@ val Number.meter get() = Length(toDouble())
 val Number.decimeter get() = Length(toDouble() / 10)
 val Number.centimeter get() = Length(toDouble() / 100)
 val Number.millimeter get() = Length(toDouble() / 1000)
-val Number.micrometer get() = Length(toDouble() / 10000)
-val Number.nanometer get() = Length(toDouble() / 100000)
+val Number.micrometer get() = Length(toDouble() / 1000000)
+val Number.nanometer get() = Length(toDouble() / 1000000000)
 val Number.yard get() = Length(toDouble() * 0.9144)
 val Number.inch get() = Length(toDouble() * 0.0254)
 val Number.foot get() = Length(toDouble() * 0.3048)

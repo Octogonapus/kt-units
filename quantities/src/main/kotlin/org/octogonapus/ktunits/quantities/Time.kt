@@ -19,8 +19,8 @@ package org.octogonapus.ktunits.quantities
 import org.octogonapus.ktunits.annotation.Quantity
 import org.octogonapus.ktunits.annotation.QuantityType
 
-val Number.gigasecond get() = Time(toDouble() * 100000)
-val Number.megasecond get() = Time(toDouble() * 10000)
+val Number.gigasecond get() = Time(toDouble() * 1000000000)
+val Number.megasecond get() = Time(toDouble() * 1000000)
 val Number.kilosecond get() = Time(toDouble() * 1000)
 val Number.hectosecond get() = Time(toDouble() * 100)
 val Number.decasecond get() = Time(toDouble() * 10)
@@ -28,8 +28,8 @@ val Number.second get() = Time(toDouble())
 val Number.decisecond get() = Time(toDouble() / 10)
 val Number.centisecond get() = Time(toDouble() / 100)
 val Number.millisecond get() = Time(toDouble() / 1000)
-val Number.microsecond get() = Time(toDouble() / 10000)
-val Number.nanosecond get() = Time(toDouble() / 100000)
+val Number.microsecond get() = Time(toDouble() / 1000000)
+val Number.nanosecond get() = Time(toDouble() / 1000000000)
 
 @QuantityType(0, 0, 1, 0)
 data class Time(
