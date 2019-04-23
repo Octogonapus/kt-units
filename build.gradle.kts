@@ -1,7 +1,4 @@
 import Build_gradle.Strings.spotlessLicenseHeaderDelimiter
-import Build_gradle.Versions.junitJupiterVersion
-import Build_gradle.Versions.kotlinVersion
-import Build_gradle.Versions.ktlintVersion
 import com.adarshr.gradle.testlogger.theme.ThemeType
 import com.github.spotbugs.SpotBugsTask
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
@@ -17,6 +14,8 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.0.0-RC12"
     id("org.jetbrains.dokka") version "0.9.18"
     id("com.adarshr.test-logger") version "1.6.0"
+    `maven-publish`
+    id("com.jfrog.bintray") version "1.8.3"
 }
 
 val annotationProject = project(":annotation")
@@ -29,18 +28,23 @@ val kotlinProjects = setOf(
     quantitiesProject
 )
 
-object Versions {
-    const val ktlintVersion = "0.29.0"
-    const val kotlinVersion = "1.3.30"
-    const val junitJupiterVersion = "5.2.0"
-}
+val publishedProjects = setOf(
+    annotationProject,
+    processorProject,
+    quantitiesProject
+)
+
+val ktlintVersion = "0.29.0"
+val kotlinVersion = "1.3.30"
+val junitJupiterVersion = "5.2.0"
+val ktUnitsVersion = "0.1.0-SNAPSHOT"
 
 object Strings {
     const val spotlessLicenseHeaderDelimiter = "(@|package|import)"
 }
 
 allprojects {
-    version = "0.1.0-SNAPSHOT"
+    version = ktUnitsVersion
     group = "org.octogonapus"
 
     apply {
@@ -225,6 +229,61 @@ configure(kotlinProjects) {
             xml.isEnabled = false
             emacs.isEnabled = false
             html.isEnabled = true
+        }
+    }
+}
+
+configure(publishedProjects) {
+    apply {
+        plugin("com.jfrog.bintray")
+        plugin("maven-publish")
+        plugin("java-library")
+    }
+
+    val projectName = "kt-units"
+
+    task<Jar>("sourcesJar") {
+        classifier = "sources"
+        baseName = "$projectName-${this@configure.name.toLowerCase()}"
+        from(sourceSets.main.get().allSource)
+    }
+
+    val dokkaJar by tasks.creating(Jar::class) {
+        group = JavaBasePlugin.DOCUMENTATION_GROUP
+        description = "Assembles Kotlin docs with Dokka"
+        classifier = "javadoc"
+        baseName = "$projectName-${this@configure.name.toLowerCase()}"
+        from(tasks.dokka)
+    }
+
+    val publicationName = "publication-$projectName-${name.toLowerCase()}"
+
+    publishing {
+        publications {
+            create<MavenPublication>(publicationName) {
+                artifactId = "$projectName-${this@configure.name.toLowerCase()}"
+                from(components["java"])
+                artifact(tasks["sourcesJar"])
+                artifact(dokkaJar)
+            }
+        }
+    }
+
+    bintray {
+        user = System.getenv("BINTRAY_USER")
+        key = System.getenv("BINTRAY_API_KEY")
+        setPublications(publicationName)
+        with(pkg) {
+            repo = "maven-artifacts"
+            name = projectName
+            publish = true
+            setLicenses("LGPL-3.0")
+            vcsUrl = "https://github.com/Octogonapus/kt-units.git"
+            githubRepo = "https://github.com/Octogonapus/kt-units"
+            with(version) {
+                name = ktUnitsVersion
+                desc = "Unit conversions and dimensional analysis for Kotlin."
+            }
         }
     }
 }
