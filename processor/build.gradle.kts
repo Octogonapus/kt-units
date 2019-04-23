@@ -11,7 +11,7 @@ description = "The annotation processor."
 val arrowVersion = "0.9.0"
 
 fun DependencyHandler.arrow(name: String) =
-    implementation(group = "io.arrow-kt", name = name, version = arrowVersion)
+    create(group = "io.arrow-kt", name = name, version = arrowVersion)
 
 dependencies {
     implementation(project(":annotation"))
@@ -20,7 +20,7 @@ dependencies {
     implementation("com.google.auto.service:auto-service:1.0-rc4")
     kapt("com.google.auto.service:auto-service:1.0-rc4")
 
-    arrow("arrow-core-extensions")
-    arrow("arrow-typeclasses")
-    arrow("arrow-extras-extensions")
+    implementation(arrow("arrow-core-extensions"))
+    implementation(arrow("arrow-typeclasses"))
+    implementation(arrow("arrow-extras-extensions"))
 }

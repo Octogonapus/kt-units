@@ -1,4 +1,6 @@
 import Build_gradle.Strings.spotlessLicenseHeaderDelimiter
+import Build_gradle.Versions.junitJupiterVersion
+import Build_gradle.Versions.kotlinVersion
 import Build_gradle.Versions.ktlintVersion
 import com.adarshr.gradle.testlogger.theme.ThemeType
 import com.github.spotbugs.SpotBugsTask
@@ -29,6 +31,8 @@ val kotlinProjects = setOf(
 
 object Versions {
     const val ktlintVersion = "0.29.0"
+    const val kotlinVersion = "1.3.30"
+    const val junitJupiterVersion = "5.2.0"
 }
 
 object Strings {
@@ -93,6 +97,9 @@ allprojects {
     }
 }
 
+fun DependencyHandler.junitJupiter(name: String) =
+    create(group = "org.junit.jupiter", name = name, version = junitJupiterVersion)
+
 configure(kotlinProjects) {
     apply {
         plugin("kotlin")
@@ -105,14 +112,11 @@ configure(kotlinProjects) {
     }
 
     dependencies {
-        fun junitJupiter(name: String, version: String = "5.2.0") =
-            create(group = "org.junit.jupiter", name = name, version = version)
+        implementation(kotlin("stdlib-jdk8", kotlinVersion))
 
-        implementation(kotlin("stdlib-jdk8"))
-
-        testCompile(junitJupiter(name = "junit-jupiter-api"))
-        testCompile(junitJupiter(name = "junit-jupiter-engine"))
-        testCompile(junitJupiter(name = "junit-jupiter-params"))
+        testCompile(junitJupiter("junit-jupiter-api"))
+        testCompile(junitJupiter("junit-jupiter-engine"))
+        testCompile(junitJupiter("junit-jupiter-params"))
         testRuntime(
             group = "org.junit.platform",
             name = "junit-platform-launcher",
