@@ -1,4 +1,3 @@
-
 import Build_gradle.Strings.spotlessLicenseHeaderDelimiter
 import Build_gradle.Versions.ktlintVersion
 import com.adarshr.gradle.testlogger.theme.ThemeType
@@ -16,7 +15,6 @@ plugins {
     id("io.gitlab.arturbosch.detekt") version "1.0.0-RC12"
     id("org.jetbrains.dokka") version "0.9.18"
     id("com.adarshr.test-logger") version "1.6.0"
-    idea
 }
 
 val annotationProject = project(":annotation")
@@ -104,7 +102,6 @@ configure(kotlinProjects) {
         plugin("com.github.spotbugs")
         plugin("io.gitlab.arturbosch.detekt")
         plugin("org.jetbrains.dokka")
-        plugin("org.gradle.idea")
     }
 
     dependencies {
@@ -225,23 +222,6 @@ configure(kotlinProjects) {
             xml.isEnabled = false
             emacs.isEnabled = false
             html.isEnabled = true
-        }
-    }
-
-    idea {
-        module {
-            sourceDirs.plusAssign(
-                files(
-                    "${rootProject.rootDir}/quantities/build/generated/source/kapt/main",
-                    "${rootProject.rootDir}/quantities/build/generated/source/kaptKotlin/main"
-                )
-            )
-            generatedSourceDirs.plusAssign(
-                files(
-                    "${rootProject.rootDir}/quantities/build/generated/source/kapt/main",
-                    "${rootProject.rootDir}/quantities/build/generated/source/kaptKotlin/main"
-                )
-            )
         }
     }
 }

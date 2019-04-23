@@ -222,8 +222,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
             returnType
         )
 
-    override fun getSupportedAnnotationTypes() =
-        mutableSetOf(QuantityType::class.java.canonicalName)
+    override fun getSupportedAnnotationTypes() = setOf(QuantityType::class.java.canonicalName)
 
     private fun getAnnotationMirror(typeElement: TypeElement, clazz: Class<*>): AnnotationMirror? {
         val clazzName = clazz.name
