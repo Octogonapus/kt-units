@@ -193,7 +193,6 @@ configure(kotlinProjects) {
                 "${rootProject.rootDir}/config/spotless/kt-units.license",
                 spotlessLicenseHeaderDelimiter
             )
-            targetExclude("${quantitiesProject.buildDir}/**/*")
         }
     }
 
