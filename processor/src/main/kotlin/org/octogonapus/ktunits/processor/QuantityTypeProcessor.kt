@@ -222,9 +222,8 @@ class QuantityTypeProcessor : AbstractProcessor() {
             returnType
         )
 
-    override fun getSupportedAnnotationTypes(): MutableSet<String> {
-        return mutableSetOf(QuantityType::class.java.canonicalName)
-    }
+    override fun getSupportedAnnotationTypes() =
+        mutableSetOf(QuantityType::class.java.canonicalName)
 
     private fun getAnnotationMirror(typeElement: TypeElement, clazz: Class<*>): AnnotationMirror? {
         val clazzName = clazz.name
@@ -248,6 +247,8 @@ class QuantityTypeProcessor : AbstractProcessor() {
         return null
     }
 
+    @Suppress("unused")
+    @SuppressWarnings("UnusedPrivateMember")
     private fun getFriends(foo: TypeElement): List<TypeMirror>? {
         val am = getAnnotationMirror(foo, QuantityType::class.java) ?: return null
         val av = getAnnotationValue(am, "friends")

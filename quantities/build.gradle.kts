@@ -12,11 +12,3 @@ dependencies {
     implementation(project(":annotation"))
     kapt(project(":processor"))
 }
-
-sourceSets {
-    main {
-        java {
-            srcDirs("build/generated/source/kapt/main", "build/generated/source/kaptKotlin/main")
-        }
-    }
-}
