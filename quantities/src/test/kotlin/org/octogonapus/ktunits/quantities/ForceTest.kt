@@ -22,11 +22,11 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.octogonapus.ktunits.annotation.Quantity
 
-internal class TimeTest {
+internal class ForceTest {
 
     @ParameterizedTest
-    @MethodSource("timeUnitsSource")
-    fun `time units tests`(expected: Quantity, actual: Quantity) {
+    @MethodSource("forceUnitsSource")
+    fun `force units tests`(expected: Quantity, actual: Quantity) {
         assertEquals(expected, actual)
     }
 
@@ -34,18 +34,12 @@ internal class TimeTest {
 
         @Suppress("unused")
         @JvmStatic
-        fun timeUnitsSource() = listOf(
-            Arguments.of(1e+9.second, 1.gigasecond),
-            Arguments.of(1e+6.second, 1.megasecond),
-            Arguments.of(1e+3.second, 1.kilosecond),
-            Arguments.of(1e+2.second, 1.hectosecond),
-            Arguments.of(1e+1.second, 1.decasecond),
-            Arguments.of(1.second, 1.second),
-            Arguments.of(1e-1.second, 1.decisecond),
-            Arguments.of(1e-2.second, 1.centisecond),
-            Arguments.of(1e-3.second, 1.millisecond),
-            Arguments.of(1e-6.second, 1.microsecond),
-            Arguments.of(1e-9.second, 1.nanosecond)
+        fun forceUnitsSource() = listOf(
+            Arguments.of(1.newton, 1.newton),
+            Arguments.of(1e-5.newton, 1.dyn),
+            Arguments.of(9.80665.newton, 1.kp),
+            Arguments.of(4.448222.newton, 1.lbF),
+            Arguments.of(0.138255.newton, 1.pdl)
         )
     }
 }

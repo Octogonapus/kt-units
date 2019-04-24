@@ -17,15 +17,18 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityConversion
+import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-val Number.sqMeter get() = Area(toDouble())
-val Number.sqInch get() = Area(toDouble() * (6.452 * 1e-4))
-val Number.sqCentimeter get() = Area(toDouble() / 1e+4)
-val Number.sqYard get() = Area(toDouble() * 0.8361)
-val Number.sqMile get() = Area(toDouble() * (2.59 * 1e+6))
-
-@QuantityType(0, 2, 0, 0)
-data class Area(
+@QuantityType(1, 1, -2, 0)
+@QuantityConversions(
+    QuantityConversion("newton", 1.0),
+    QuantityConversion("dyn", 1e-5),
+    QuantityConversion("kp", 9.80665),
+    QuantityConversion("lbF", 4.448222),
+    QuantityConversion("pdl", 0.138255)
+)
+data class Force(
     override var value: Double
-) : Quantity(0, 2, 0, 0, value)
+) : Quantity(1, 1, -2, 0, value)

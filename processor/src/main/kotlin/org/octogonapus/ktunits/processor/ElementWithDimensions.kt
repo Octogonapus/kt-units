@@ -14,18 +14,21 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with kt-units.  If not, see <https://www.gnu.org/licenses/>.
  */
-package org.octogonapus.ktunits.quantities
+package org.octogonapus.ktunits.processor
 
-import org.octogonapus.ktunits.annotation.Quantity
-import org.octogonapus.ktunits.annotation.QuantityType
+import javax.lang.model.element.Element
 
-val Number.sqMeter get() = Area(toDouble())
-val Number.sqInch get() = Area(toDouble() * (6.452 * 1e-4))
-val Number.sqCentimeter get() = Area(toDouble() / 1e+4)
-val Number.sqYard get() = Area(toDouble() * 0.8361)
-val Number.sqMile get() = Area(toDouble() * (2.59 * 1e+6))
+internal data class ElementWithDimensions(
+    val element: Element,
+    val dimensions: DimensionData
+)
 
-@QuantityType(0, 2, 0, 0)
-data class Area(
-    override var value: Double
-) : Quantity(0, 2, 0, 0, value)
+internal fun ElementWithDimensions.isMultiplyCompatible(
+    other: ElementWithDimensions,
+    possibleReturnTypes: List<ElementWithDimensions>
+) = possibleReturnTypes.filter { dimensions + other.dimensions == it.dimensions }.toSet()
+
+internal fun ElementWithDimensions.isDivideCompatible(
+    other: ElementWithDimensions,
+    possibleReturnTypes: List<ElementWithDimensions>
+) = possibleReturnTypes.filter { dimensions - other.dimensions == it.dimensions }.toSet()

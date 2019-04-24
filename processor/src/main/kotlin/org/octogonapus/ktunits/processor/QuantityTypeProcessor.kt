@@ -24,8 +24,11 @@ import com.google.auto.service.AutoService
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.asTypeName
+import org.octogonapus.ktunits.annotation.QuantityConversion
+import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 import java.io.File
 import javax.annotation.processing.AbstractProcessor
@@ -34,12 +37,9 @@ import javax.annotation.processing.RoundEnvironment
 import javax.annotation.processing.SupportedOptions
 import javax.annotation.processing.SupportedSourceVersion
 import javax.lang.model.SourceVersion
-import javax.lang.model.element.AnnotationMirror
-import javax.lang.model.element.AnnotationValue
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
 import javax.lang.model.element.TypeElement
-import javax.lang.model.type.TypeMirror
 import javax.tools.Diagnostic
 
 /**
@@ -50,148 +50,132 @@ import javax.tools.Diagnostic
 @SupportedOptions(QuantityTypeProcessor.KAPT_KOTLIN_GENERATED_OPTION_NAME)
 class QuantityTypeProcessor : AbstractProcessor() {
 
-    private fun validateAnnotatedClasses(classes: Set<Element>) {
-        classes.forEach {
-            if (it.kind != ElementKind.CLASS) {
-                processingEnv.messager.printMessage(
-                    Diagnostic.Kind.ERROR,
-                    "Can only be applied to classes, element: $it"
-                )
-                throw UnsupportedOperationException("Can only be applied to classes, element: $it")
-            }
-
-            val generatedSourcesRoot: String =
-                processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME].orEmpty()
-            if (generatedSourcesRoot.isEmpty()) {
-                processingEnv.messager.printMessage(
-                    Diagnostic.Kind.ERROR,
-                    "Can't find the target directory for generated Kotlin files."
-                )
-                throw UnsupportedOperationException("Can't find the target directory for generated Kotlin files.")
-            }
-        }
-    }
-
-    private data class DimensionData(
-        val massDim: Long,
-        val lengthDim: Long,
-        val timeDim: Long,
-        val angleDim: Long
-    ) {
-
-        operator fun plus(other: DimensionData) =
-            DimensionData(
-                massDim + other.massDim,
-                lengthDim + other.lengthDim,
-                timeDim + other.timeDim,
-                angleDim + other.angleDim
-            )
-
-        operator fun minus(other: DimensionData) =
-            DimensionData(
-                massDim - other.massDim,
-                lengthDim - other.lengthDim,
-                timeDim - other.timeDim,
-                angleDim - other.angleDim
-            )
-    }
-
-    private fun Element.getDimensionData() =
-        getAnnotation(QuantityType::class.java).let {
-            DimensionData(
-                it.massDim,
-                it.lengthDim,
-                it.timeDim,
-                it.angleDim
-            )
-        }
-
-    private data class ElementWithDimensions(
-        val element: Element,
-        val dimensions: DimensionData
-    )
-
-    private fun ElementWithDimensions.isMultiplyCompatible(
-        other: ElementWithDimensions,
-        possibleReturnTypes: List<ElementWithDimensions>
-    ) = possibleReturnTypes.filter { dimensions + other.dimensions == it.dimensions }.toSet()
-
-    private fun ElementWithDimensions.isDivideCompatible(
-        other: ElementWithDimensions,
-        possibleReturnTypes: List<ElementWithDimensions>
-    ) = possibleReturnTypes.filter { dimensions - other.dimensions == it.dimensions }.toSet()
+    override fun getSupportedAnnotationTypes() = setOf(QuantityType::class.java.canonicalName)
 
     override fun process(
         annotations: MutableSet<out TypeElement>,
         roundEnv: RoundEnvironment
     ): Boolean {
-        val annotatedClasses = roundEnv.getElementsAnnotatedWith(QuantityType::class.java)
-        if (annotatedClasses.isEmpty()) return false
-        validateAnnotatedClasses(annotatedClasses)
+        val annotatedTypeClasses = roundEnv.getElementsAnnotatedWith(QuantityType::class.java)
+        if (annotatedTypeClasses.isEmpty()) return false
+        validateAnnotatedClasses(annotatedTypeClasses)
 
         val generatedSourcesRoot: String =
             processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME].orEmpty()
 
-        val annotatedClassesToDimensions = annotatedClasses.map {
+        val annotatedClassesToDimensions = annotatedTypeClasses.map {
             ElementWithDimensions(it, it.getDimensionData())
         }
 
-        val allFunBuilders = mutableListOf<FunSpec.Builder>()
+        val allFunBuilders = mutableListOf<FunSpec>()
+        val allPropBuilders = mutableListOf<PropertySpec>()
 
         val cartesianProduct = ListK.applicative()
             .tupled(annotatedClassesToDimensions.k(), annotatedClassesToDimensions.k())
             .fix()
 
         cartesianProduct.forEach {
-            val returnTypes = it.a.isMultiplyCompatible(it.b, annotatedClassesToDimensions)
-            if (returnTypes.size == 1) {
+            // Emitting multiple functions here will cause conflicting declarations, but it helps
+            // the user know the root cause
+            it.a.isMultiplyCompatible(it.b, annotatedClassesToDimensions).forEach { returnType ->
                 allFunBuilders.add(
-                    buildMultiplyOrDivideFun(
-                        it.a.element.asType().asTypeName(),
-                        it.b.element.asType().asTypeName(),
-                        returnTypes.first().element.asType().asTypeName(),
-                        "times",
-                        '*'
-                    )
+                    buildMultiplyFun(it.a, it.b, returnType)
                 )
             }
         }
 
         cartesianProduct.forEach {
-            val returnTypes = it.a.isDivideCompatible(it.b, annotatedClassesToDimensions)
-            if (returnTypes.size == 1) {
+            // Emitting multiple functions here will cause conflicting declarations, but it helps
+            // the user know the root cause
+            it.a.isDivideCompatible(it.b, annotatedClassesToDimensions).forEach { returnType ->
                 allFunBuilders.add(
-                    buildMultiplyOrDivideFun(
-                        it.a.element.asType().asTypeName(),
-                        it.b.element.asType().asTypeName(),
-                        returnTypes.first().element.asType().asTypeName(),
-                        "div",
-                        '/'
-                    )
+                    buildDivideFun(it.a, it.b, returnType)
                 )
             }
         }
 
-        annotatedClasses.forEach { element ->
-            element as TypeElement
-            val ourType = element.asType().asTypeName()
-            allFunBuilders.add(buildPlusOrMinusFun(ourType, "plus", '+'))
-            allFunBuilders.add(buildPlusOrMinusFun(ourType, "minus", '-'))
+        annotatedTypeClasses.forEach { element ->
+            val typeName = element.asType().asTypeName()
+            allFunBuilders.add(buildPlusFun(typeName))
+            allFunBuilders.add(buildMinusFun(typeName))
+        }
+
+        annotatedTypeClasses.forEach { element ->
+            val conversions = element.getAnnotation(QuantityConversions::class.java)
+            val conversionFuns = conversions?.values?.flatMap {
+                buildConversionFuns(element.asType().asTypeName(), it)
+            }
+
+            conversionFuns?.let { allPropBuilders.addAll(it) }
         }
 
         val file = File(generatedSourcesRoot)
         file.mkdir()
 
         val fileSpecBuilder = FileSpec.builder(
-            processingEnv.elementUtils.getPackageOf(annotatedClasses.first()).toString(),
+            processingEnv.elementUtils.getPackageOf(annotatedTypeClasses.first()).toString(),
             "BindFieldsGenerated"
         )
 
-        allFunBuilders.forEach { fileSpecBuilder.addFunction(it.build()) }
+        allFunBuilders.forEach { fileSpecBuilder.addFunction(it) }
+        allPropBuilders.forEach { fileSpecBuilder.addProperty(it) }
 
         fileSpecBuilder.build().writeTo(file)
+
         return false
     }
+
+    private fun validateAnnotatedClasses(classes: Set<Element>) {
+        classes.forEach { element ->
+            if (element.kind != ElementKind.CLASS) {
+                "Can only be applied to classes, element: $element".let {
+                    printError(it)
+                    throw UnsupportedOperationException(it)
+                }
+            }
+
+            val generatedSourcesRoot =
+                processingEnv.options[KAPT_KOTLIN_GENERATED_OPTION_NAME].orEmpty()
+            if (generatedSourcesRoot.isEmpty()) {
+                "Can't find the target directory for generated Kotlin files.".let {
+                    printError(it)
+                    throw UnsupportedOperationException(it)
+                }
+            }
+        }
+    }
+
+    private fun buildMultiplyFun(
+        receiverType: ElementWithDimensions,
+        parameterType: ElementWithDimensions,
+        returnType: ElementWithDimensions
+    ) = buildMultiplyOrDivideFun(
+        receiverType.element.asType().asTypeName(),
+        parameterType.element.asType().asTypeName(),
+        returnType.element.asType().asTypeName(),
+        "times",
+        '*'
+    )
+
+    private fun buildDivideFun(
+        receiverType: ElementWithDimensions,
+        parameterType: ElementWithDimensions,
+        returnType: ElementWithDimensions
+    ) = buildMultiplyOrDivideFun(
+        receiverType.element.asType().asTypeName(),
+        parameterType.element.asType().asTypeName(),
+        returnType.element.asType().asTypeName(),
+        "div",
+        '/'
+    )
+
+    private fun buildPlusFun(
+        type: TypeName
+    ) = buildPlusOrMinusFun(type, "plus", '+')
+
+    private fun buildMinusFun(
+        type: TypeName
+    ) = buildPlusOrMinusFun(type, "minus", '-')
 
     private fun buildPlusOrMinusFun(type: TypeName, name: String, op: Char) =
         FunSpec.builder(name)
@@ -203,6 +187,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
                 "return %T(value $op other.value)",
                 type
             )
+            .build()
 
     private fun buildMultiplyOrDivideFun(
         receiverType: TypeName,
@@ -221,43 +206,43 @@ class QuantityTypeProcessor : AbstractProcessor() {
             """.trimMargin(),
             returnType
         )
+        .build()
 
-    override fun getSupportedAnnotationTypes() = setOf(QuantityType::class.java.canonicalName)
+    private fun buildConversionFuns(
+        conversionClass: TypeName,
+        conversionData: QuantityConversion
+    ) = listOf(
+        PropertySpec.builder(conversionData.name, conversionClass)
+            .receiver(Number::class.asTypeName())
+            .getter(
+                FunSpec.builder("get()")
+                    .addModifiers(KModifier.PUBLIC)
+                    .receiver(Number::class.asTypeName())
+                    .addStatement(
+                        """
+                        |return %T(toDouble() * ${conversionData.ratio})
+                        """.trimMargin(),
+                        conversionClass
+                    ).build()
+            )
+            .build(),
+        PropertySpec.builder(conversionData.name, Number::class.asTypeName())
+            .receiver(conversionClass)
+            .getter(
+                FunSpec.builder("get()")
+                    .addModifiers(KModifier.PUBLIC)
+                    .receiver(conversionClass)
+                    .addStatement(
+                        """
+                        |return value / ${conversionData.ratio}
+                        """.trimMargin()
+                    ).build()
+            )
+            .build()
+    )
 
-    private fun getAnnotationMirror(typeElement: TypeElement, clazz: Class<*>): AnnotationMirror? {
-        val clazzName = clazz.name
-        for (m in typeElement.annotationMirrors) {
-            if (m.annotationType.toString() == clazzName) {
-                return m
-            }
-        }
-        return null
-    }
-
-    private fun getAnnotationValue(
-        annotationMirror: AnnotationMirror,
-        key: String
-    ): AnnotationValue? {
-        for ((key1, value) in annotationMirror.elementValues) {
-            if (key1.simpleName.toString() == key) {
-                return value
-            }
-        }
-        return null
-    }
-
-    @Suppress("unused")
-    @SuppressWarnings("UnusedPrivateMember")
-    private fun getFriends(foo: TypeElement): List<TypeMirror>? {
-        val am = getAnnotationMirror(foo, QuantityType::class.java) ?: return null
-        val av = getAnnotationValue(am, "friends")
-        return if (av == null) {
-            null
-        } else {
-            @Suppress("UNCHECKED_CAST")
-            av.value as List<TypeMirror>
-        }
-    }
+    private fun printError(message: String) =
+        processingEnv.messager.printMessage(Diagnostic.Kind.ERROR, message)
 
     companion object {
         const val KAPT_KOTLIN_GENERATED_OPTION_NAME = "kapt.kotlin.generated"

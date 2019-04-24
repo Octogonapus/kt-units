@@ -35,17 +35,17 @@ internal class MassTest {
         @Suppress("unused")
         @JvmStatic
         fun massUnitsSource() = listOf(
-            Arguments.of(0.000000000001.kilogram, 1.nanogram),
-            Arguments.of(0.000000001.kilogram, 1.microgram),
-            Arguments.of(0.000001.kilogram, 1.milligram),
-            Arguments.of(0.00001.kilogram, 1.centigram),
-            Arguments.of(0.0001.kilogram, 1.decigram),
-            Arguments.of(0.001.kilogram, 1.gram),
-            Arguments.of(0.01.kilogram, 1.decagram),
-            Arguments.of(0.1.kilogram, 1.hectogram),
+            Arguments.of(1e-12.kilogram, 1.nanogram),
+            Arguments.of(1e-9.kilogram, 1.microgram),
+            Arguments.of(1e-6.kilogram, 1.milligram),
+            Arguments.of(1e-5.kilogram, 1.centigram),
+            Arguments.of(1e-4.kilogram, 1.decigram),
+            Arguments.of(1e-3.kilogram, 1.gram),
+            Arguments.of(1e-2.kilogram, 1.decagram),
+            Arguments.of(1e-1.kilogram, 1.hectogram),
             Arguments.of(1.kilogram, 1.kilogram),
-            Arguments.of(1000.kilogram, 1.megagram),
-            Arguments.of(1000000.kilogram, 1.gigagram),
+            Arguments.of(1e+3.kilogram, 1.megagram),
+            Arguments.of(1e+6.kilogram, 1.gigagram),
             Arguments.of(0.4536.kilogram, 1.lbM),
             Arguments.of(0.02835.kilogram, 1.oz)
         )

@@ -14,18 +14,28 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with kt-units.  If not, see <https://www.gnu.org/licenses/>.
  */
-package org.octogonapus.ktunits.quantities
+package org.octogonapus.ktunits.annotation
 
-import org.octogonapus.ktunits.annotation.Quantity
-import org.octogonapus.ktunits.annotation.QuantityType
+/**
+ * @param name The name of the conversion
+ * @param ratio The conversion ratio.
+ */
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.CLASS)
+@Repeatable
+annotation class QuantityConversion(
+    val name: String,
+    val ratio: Double
+)
 
-val Number.sqMeter get() = Area(toDouble())
-val Number.sqInch get() = Area(toDouble() * (6.452 * 1e-4))
-val Number.sqCentimeter get() = Area(toDouble() / 1e+4)
-val Number.sqYard get() = Area(toDouble() * 0.8361)
-val Number.sqMile get() = Area(toDouble() * (2.59 * 1e+6))
-
-@QuantityType(0, 2, 0, 0)
-data class Area(
-    override var value: Double
-) : Quantity(0, 2, 0, 0, value)
+/**
+ * This annotation MUST be applied ONLY to classes which inherit from [Quantity] AND are also
+ * annotated with [QuantityType].
+ *
+ * This is a workaround because of this issue: https://youtrack.jetbrains.com/issue/KT-12794
+ */
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.CLASS)
+annotation class QuantityConversions(
+    vararg val values: QuantityConversion
+)
