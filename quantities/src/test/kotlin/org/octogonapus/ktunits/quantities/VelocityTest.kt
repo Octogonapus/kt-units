@@ -40,7 +40,7 @@ internal class VelocityTest {
             Arguments.of(2.236936.mps, 1.miph),
             Arguments.of(0.277778.mps, 1.kmph),
             Arguments.of(1e+3.mps, 1.kmps),
-            Arguments.of(30.48.mps, 1.fps)
+            Arguments.of(0.3048.mps, 1.fps)
         )
     }
 }

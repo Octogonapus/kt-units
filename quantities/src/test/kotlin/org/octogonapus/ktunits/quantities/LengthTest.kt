@@ -17,7 +17,6 @@
 package org.octogonapus.ktunits.quantities
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -29,11 +28,6 @@ internal class LengthTest {
     @MethodSource("lengthUnitsSource")
     fun `length units tests`(expected: Quantity, actual: Quantity) {
         assertEquals(expected, actual)
-    }
-
-    @Test
-    fun ad() {
-        println(1.meter + 3.second)
     }
 
     companion object {
