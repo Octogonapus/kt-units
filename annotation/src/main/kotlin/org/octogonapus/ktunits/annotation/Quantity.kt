@@ -24,6 +24,10 @@ open class Quantity(
     open var value: Double
 ) {
 
+    fun dimensionsEqual(other: Quantity) =
+        massDim == other.massDim && lengthDim == other.lengthDim && timeDim == other.timeDim &&
+            angleDim == other.angleDim
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Quantity) return false
@@ -48,7 +52,7 @@ open class Quantity(
 
     override fun toString(): String {
         return "Quantity(massDim=$massDim, lengthDim=$lengthDim, timeDim=$timeDim, " +
-                "angleDim=$angleDim, value=$value)"
+            "angleDim=$angleDim, value=$value)"
     }
 }
 
@@ -58,7 +62,17 @@ open class Quantity(
  * This is an extension function so that it can be overloaded with generated extension functions.
  */
 operator fun Quantity.plus(other: Quantity) =
-    Quantity(massDim, lengthDim, timeDim, angleDim, value + other.value)
+    if (dimensionsEqual(other)) {
+        Quantity(massDim, lengthDim, timeDim, angleDim, value + other.value)
+    } else {
+        throw UnsupportedOperationException(
+            """
+            |Cannot add quantities with unequal dimensions:
+            |$this
+            |$other
+            """.trimMargin()
+        )
+    }
 
 /**
  * Returns the difference of [this] and [other].
@@ -66,7 +80,17 @@ operator fun Quantity.plus(other: Quantity) =
  * This is an extension function so that it can be overloaded with generated extension functions.
  */
 operator fun Quantity.minus(other: Quantity) =
-    Quantity(massDim, lengthDim, timeDim, angleDim, value - other.value)
+    if (dimensionsEqual(other)) {
+        Quantity(massDim, lengthDim, timeDim, angleDim, value - other.value)
+    } else {
+        throw UnsupportedOperationException(
+            """
+            |Cannot subtract quantities with unequal dimensions:
+            |$this
+            |$other
+            """.trimMargin()
+        )
+    }
 
 /**
  * Returns the product of [this] and [other].
