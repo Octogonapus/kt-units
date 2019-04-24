@@ -114,7 +114,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
 
         val fileSpecBuilder = FileSpec.builder(
             processingEnv.elementUtils.getPackageOf(annotatedTypeClasses.first()).toString(),
-            "BindFieldsGenerated"
+            "GeneratedQuantities"
         )
 
         allFunBuilders.forEach { fileSpecBuilder.addFunction(it) }

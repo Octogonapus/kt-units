@@ -25,7 +25,7 @@ import org.octogonapus.ktunits.annotation.QuantityType
 @QuantityConversions(
     QuantityConversion("mps", 1.0),
     QuantityConversion("cmps", 1e-2),
-    QuantityConversion("fps", 30.48),
+    QuantityConversion("fps", 0.3048),
     QuantityConversion("miph", 2.236936),
     QuantityConversion("kmph", 0.277778),
     QuantityConversion("kmps", 1e+3)

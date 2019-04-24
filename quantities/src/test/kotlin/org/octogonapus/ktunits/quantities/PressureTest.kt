@@ -17,45 +17,27 @@
 package org.octogonapus.ktunits.quantities
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.octogonapus.ktunits.annotation.Quantity
 
-internal class LengthTest {
+internal class PressureTest {
 
     @ParameterizedTest
-    @MethodSource("lengthUnitsSource")
-    fun `length units tests`(expected: Quantity, actual: Quantity) {
+    @MethodSource("pressureUnitsSource")
+    fun `pressure units tests`(expected: Quantity, actual: Quantity) {
         assertEquals(expected, actual)
-    }
-
-    @Test
-    fun ad() {
-        println(1.meter + 3.second)
     }
 
     companion object {
 
         @Suppress("unused")
         @JvmStatic
-        fun lengthUnitsSource() = listOf(
-            Arguments.of(1e+9.meter, 1.gigameter),
-            Arguments.of(1e+6.meter, 1.megameter),
-            Arguments.of(1e+3.meter, 1.kilometer),
-            Arguments.of(1e+2.meter, 1.hectometer),
-            Arguments.of(1e+1.meter, 1.decameter),
-            Arguments.of(1.meter, 1.meter),
-            Arguments.of(1e-1.meter, 1.decimeter),
-            Arguments.of(1e-2.meter, 1.centimeter),
-            Arguments.of(1e-3.meter, 1.millimeter),
-            Arguments.of(1e-6.meter, 1.micrometer),
-            Arguments.of(1e-9.meter, 1.nanometer),
-            Arguments.of(0.9144.meter, 1.yard),
-            Arguments.of(0.0254.meter, 1.inch),
-            Arguments.of(0.3048.meter, 1.foot),
-            Arguments.of(1609.344.meter, 1.mile)
+        fun pressureUnitsSource() = listOf(
+            Arguments.of(1.pascal, 1.pascal),
+            Arguments.of(1e+5.pascal, 1.bar),
+            Arguments.of(6894.757293168.pascal, 1.lbFin)
         )
     }
 }

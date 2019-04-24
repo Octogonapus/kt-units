@@ -17,9 +17,16 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityConversion
+import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
 @QuantityType(1, -1, -2, 0)
+@QuantityConversions(
+    QuantityConversion("pascal", 1.0),
+    QuantityConversion("bar", 1e+5),
+    QuantityConversion("lbFin", 6894.757293168)
+)
 data class Pressure(
     override var value: Double
 ) : Quantity(1, -1, -2, 0, value)
