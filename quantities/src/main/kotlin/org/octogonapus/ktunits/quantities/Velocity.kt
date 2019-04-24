@@ -17,16 +17,19 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityConversion
+import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-val Number.mps get() = Velocity(toDouble())
-val Number.cmps get() = Velocity(toDouble() / 100)
-val Number.fps get() = Velocity(toDouble() * 30.48)
-val Number.miph get() = Velocity(toDouble() * 2.236936)
-val Number.kmph get() = Velocity(toDouble() * 0.277778)
-val Number.kmps get() = Velocity(toDouble() * 1000)
-
 @QuantityType(0, 1, -1, 0)
+@QuantityConversions(
+    QuantityConversion("mps", 1.0),
+    QuantityConversion("cmps", 1e-2),
+    QuantityConversion("fps", 30.48),
+    QuantityConversion("miph", 2.236936),
+    QuantityConversion("kmph", 0.277778),
+    QuantityConversion("kmps", 1e+3)
+)
 data class Velocity(
     override var value: Double
 ) : Quantity(0, 1, -1, 0, value)

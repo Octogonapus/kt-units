@@ -17,21 +17,24 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityConversion
+import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-val Number.gigasecond get() = Time(toDouble() * 1000000000)
-val Number.megasecond get() = Time(toDouble() * 1000000)
-val Number.kilosecond get() = Time(toDouble() * 1000)
-val Number.hectosecond get() = Time(toDouble() * 100)
-val Number.decasecond get() = Time(toDouble() * 10)
-val Number.second get() = Time(toDouble())
-val Number.decisecond get() = Time(toDouble() / 10)
-val Number.centisecond get() = Time(toDouble() / 100)
-val Number.millisecond get() = Time(toDouble() / 1000)
-val Number.microsecond get() = Time(toDouble() / 1000000)
-val Number.nanosecond get() = Time(toDouble() / 1000000000)
-
 @QuantityType(0, 0, 1, 0)
+@QuantityConversions(
+    QuantityConversion("gigasecond", 1e+9),
+    QuantityConversion("megasecond", 1e+6),
+    QuantityConversion("kilosecond", 1e+3),
+    QuantityConversion("hectosecond", 1e+2),
+    QuantityConversion("decasecond", 1e+1),
+    QuantityConversion("second", 1.0),
+    QuantityConversion("decisecond", 1e-1),
+    QuantityConversion("centisecond", 1e-2),
+    QuantityConversion("millisecond", 1e-3),
+    QuantityConversion("microsecond", 1e-6),
+    QuantityConversion("nanosecond", 1e-9)
+)
 data class Time(
     override var value: Double
 ) : Quantity(0, 0, 1, 0, value)

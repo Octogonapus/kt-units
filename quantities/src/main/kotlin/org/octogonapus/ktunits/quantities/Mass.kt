@@ -17,23 +17,26 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityConversion
+import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-val Number.gigagram get() = Mass(toDouble() * 1000000)
-val Number.megagram get() = Mass(toDouble() * 1000)
-val Number.kilogram get() = Mass(toDouble())
-val Number.hectogram get() = Mass(toDouble() / 10)
-val Number.decagram get() = Mass(toDouble() / 100)
-val Number.gram get() = Mass(toDouble() / 1000)
-val Number.decigram get() = Mass(toDouble() / 10000)
-val Number.centigram get() = Mass(toDouble() / 100000)
-val Number.milligram get() = Mass(toDouble() / 1000000)
-val Number.microgram get() = Mass(toDouble() / 1000000000)
-val Number.nanogram get() = Mass(toDouble() / 1000000000000)
-val Number.lbM get() = Mass(toDouble() * 0.4536)
-val Number.oz get() = Mass(toDouble() * 0.02835)
-
 @QuantityType(1, 0, 0, 0)
+@QuantityConversions(
+    QuantityConversion("gigagram", 1e+6),
+    QuantityConversion("megagram", 1e+3),
+    QuantityConversion("kilogram", 1.0),
+    QuantityConversion("hectogram", 1e-1),
+    QuantityConversion("decagram", 1e-2),
+    QuantityConversion("gram", 1e-3),
+    QuantityConversion("decigram", 1e-4),
+    QuantityConversion("centigram", 1e-5),
+    QuantityConversion("milligram", 1e-6),
+    QuantityConversion("microgram", 1e-9),
+    QuantityConversion("nanogram", 1e-12),
+    QuantityConversion("lbM", 0.4536),
+    QuantityConversion("oz", 0.02835)
+)
 data class Mass(
     override var value: Double
 ) : Quantity(1, 0, 0, 0, value)

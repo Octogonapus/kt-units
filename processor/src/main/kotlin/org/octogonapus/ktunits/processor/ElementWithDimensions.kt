@@ -26,9 +26,9 @@ internal data class ElementWithDimensions(
 internal fun ElementWithDimensions.isMultiplyCompatible(
     other: ElementWithDimensions,
     possibleReturnTypes: List<ElementWithDimensions>
-) = possibleReturnTypes.filter { dimensions + other.dimensions == it.dimensions }.toSet()
+) = possibleReturnTypes.filter { dimensions + other.dimensions == it.dimensions }
 
 internal fun ElementWithDimensions.isDivideCompatible(
     other: ElementWithDimensions,
     possibleReturnTypes: List<ElementWithDimensions>
-) = possibleReturnTypes.filter { dimensions - other.dimensions == it.dimensions }.toSet()
+) = possibleReturnTypes.filter { dimensions - other.dimensions == it.dimensions }

@@ -17,25 +17,28 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityConversion
+import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-val Number.gigameter get() = Length(toDouble() * 1000000000)
-val Number.megameter get() = Length(toDouble() * 1000000)
-val Number.kilometer get() = Length(toDouble() * 1000)
-val Number.hectometer get() = Length(toDouble() * 100)
-val Number.decameter get() = Length(toDouble() * 10)
-val Number.meter get() = Length(toDouble())
-val Number.decimeter get() = Length(toDouble() / 10)
-val Number.centimeter get() = Length(toDouble() / 100)
-val Number.millimeter get() = Length(toDouble() / 1000)
-val Number.micrometer get() = Length(toDouble() / 1000000)
-val Number.nanometer get() = Length(toDouble() / 1000000000)
-val Number.yard get() = Length(toDouble() * 0.9144)
-val Number.inch get() = Length(toDouble() * 0.0254)
-val Number.foot get() = Length(toDouble() * 0.3048)
-val Number.mile get() = Length(toDouble() * 1609.344)
-
 @QuantityType(0, 1, 0, 0)
+@QuantityConversions(
+    QuantityConversion("gigameter", 1e+9),
+    QuantityConversion("megameter", 1e+6),
+    QuantityConversion("kilometer", 1e+3),
+    QuantityConversion("hectometer", 1e+2),
+    QuantityConversion("decameter", 1e+1),
+    QuantityConversion("meter", 1.0),
+    QuantityConversion("decimeter", 1e-1),
+    QuantityConversion("centimeter", 1e-2),
+    QuantityConversion("millimeter", 1e-3),
+    QuantityConversion("micrometer", 1e-6),
+    QuantityConversion("nanometer", 1e-9),
+    QuantityConversion("yard", 0.9144),
+    QuantityConversion("inch", 0.0254),
+    QuantityConversion("foot", 0.3048),
+    QuantityConversion("mile", 1609.344)
+)
 data class Length(
     override var value: Double
 ) : Quantity(0, 1, 0, 0, value)
