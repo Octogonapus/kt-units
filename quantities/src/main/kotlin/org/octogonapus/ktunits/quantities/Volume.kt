@@ -17,9 +17,22 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityConversion
+import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
 @QuantityType(0, 3, 0, 0)
+@QuantityConversions(
+    QuantityConversion("cubicMeter", 1.0),
+    QuantityConversion("cubicCentimeter", 1e-6),
+    QuantityConversion("cubicInch", (1.639 * 1e-5)),
+    QuantityConversion("cubicFoot", (2.832 * 1e-2)),
+    QuantityConversion("cubicYard", (7.646 * 1e-1)),
+    QuantityConversion("liter", 1e-3),
+    QuantityConversion("quart", (9.464 * 1e-4)),
+    QuantityConversion("pint", (4.732 * 1e-4)),
+    QuantityConversion("gallon", (3.785 * 1e-3))
+)
 data class Volume(
     override val value: Double
 ) : Quantity(0, 3, 0, 0, value)

@@ -16,16 +16,30 @@
  */
 package org.octogonapus.ktunits.quantities
 
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import org.octogonapus.ktunits.annotation.Quantity
-import org.octogonapus.ktunits.annotation.QuantityConversion
-import org.octogonapus.ktunits.annotation.QuantityConversions
-import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(0, 0, -1, 0)
-@QuantityConversions(
-    QuantityConversion("hz", 1.0),
-    QuantityConversion("kHz", 1e+3)
-)
-data class Frequency(
-    override val value: Double
-) : Quantity(0, 0, -1, 0, value)
+internal class TorqueTest {
+
+    @ParameterizedTest
+    @MethodSource("torqueUnitsSource")
+    fun `torque units tests`(expected: Quantity, actual: Quantity) {
+        assertEquals(expected, actual)
+    }
+
+    companion object {
+
+        @Suppress("unused")
+        @JvmStatic
+        fun torqueUnitsSource() = listOf(
+            Arguments.of(1.nM, 1.nM),
+            Arguments.of(0.102.nM, 1.kgFM),
+            Arguments.of(0.7376.nM, 1.lbFFt),
+            Arguments.of(0.113.nM, 1.lbFIn),
+            Arguments.of((7.062 * 1e-3).nM, 1.ozFIn)
+        )
+    }
+}

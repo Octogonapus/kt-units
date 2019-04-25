@@ -16,16 +16,27 @@
  */
 package org.octogonapus.ktunits.quantities
 
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import org.octogonapus.ktunits.annotation.Quantity
-import org.octogonapus.ktunits.annotation.QuantityConversion
-import org.octogonapus.ktunits.annotation.QuantityConversions
-import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(0, 0, -1, 0)
-@QuantityConversions(
-    QuantityConversion("hz", 1.0),
-    QuantityConversion("kHz", 1e+3)
-)
-data class Frequency(
-    override val value: Double
-) : Quantity(0, 0, -1, 0, value)
+internal class FrequencyTest {
+
+    @ParameterizedTest
+    @MethodSource("frequencyUnitsSource")
+    fun `frequency units tests`(expected: Quantity, actual: Quantity) {
+        assertEquals(expected, actual)
+    }
+
+    companion object {
+
+        @Suppress("unused")
+        @JvmStatic
+        fun frequencyUnitsSource() = listOf(
+            Arguments.of(1.hz, 1.hz),
+            Arguments.of(1e+3.hz, 1.kHz)
+        )
+    }
+}

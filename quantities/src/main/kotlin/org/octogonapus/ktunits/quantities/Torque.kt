@@ -17,9 +17,18 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityConversion
+import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
 @QuantityType(1, 2, -2, 0)
+@QuantityConversions(
+    QuantityConversion("nM", 1.0),
+    QuantityConversion("kgFM", 0.102),
+    QuantityConversion("lbFFt", 0.7376),
+    QuantityConversion("lbFIn", 0.113),
+    QuantityConversion("ozFIn", (7.062 * 1e-3))
+)
 data class Torque(
     override val value: Double
 ) : Quantity(1, 2, -2, 0, value)
