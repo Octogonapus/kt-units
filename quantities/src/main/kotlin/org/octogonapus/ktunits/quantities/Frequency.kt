@@ -21,5 +21,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
 
 @QuantityType(0, 0, -1, 0)
 data class Frequency(
-    override var value: Double
+    override val value: Double
 ) : Quantity(0, 0, -1, 0, value)

@@ -21,7 +21,7 @@ open class Quantity(
     val lengthDim: Long,
     val timeDim: Long,
     val angleDim: Long,
-    open var value: Double
+    open val value: Double
 ) {
 
     fun dimensionsEqual(other: Quantity) =

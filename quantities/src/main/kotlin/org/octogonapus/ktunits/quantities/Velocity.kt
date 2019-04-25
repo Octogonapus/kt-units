@@ -31,5 +31,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("kmps", 1e+3)
 )
 data class Velocity(
-    override var value: Double
+    override val value: Double
 ) : Quantity(0, 1, -1, 0, value)

@@ -28,5 +28,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("lbFin", 6894.757293168)
 )
 data class Pressure(
-    override var value: Double
+    override val value: Double
 ) : Quantity(1, -1, -2, 0, value)

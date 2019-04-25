@@ -36,5 +36,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("nanosecond", 1e-9)
 )
 data class Time(
-    override var value: Double
+    override val value: Double
 ) : Quantity(0, 0, 1, 0, value)

@@ -21,5 +21,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
 
 @QuantityType(0, 3, 0, 0)
 data class Volume(
-    override var value: Double
+    override val value: Double
 ) : Quantity(0, 3, 0, 0, value)

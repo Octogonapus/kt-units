@@ -30,5 +30,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("sqMile", 2.59 * 1e+6)
 )
 data class Area(
-    override var value: Double
+    override val value: Double
 ) : Quantity(0, 2, 0, 0, value)

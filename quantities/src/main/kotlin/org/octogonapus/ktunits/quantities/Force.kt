@@ -30,5 +30,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("pdl", 0.138255)
 )
 data class Force(
-    override var value: Double
+    override val value: Double
 ) : Quantity(1, 1, -2, 0, value)

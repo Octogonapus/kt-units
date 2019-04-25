@@ -40,5 +40,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("mile", 1609.344)
 )
 data class Length(
-    override var value: Double
+    override val value: Double
 ) : Quantity(0, 1, 0, 0, value)

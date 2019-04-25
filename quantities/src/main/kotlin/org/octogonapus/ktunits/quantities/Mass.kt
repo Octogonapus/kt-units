@@ -38,5 +38,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("oz", 0.02835)
 )
 data class Mass(
-    override var value: Double
+    override val value: Double
 ) : Quantity(1, 0, 0, 0, value)

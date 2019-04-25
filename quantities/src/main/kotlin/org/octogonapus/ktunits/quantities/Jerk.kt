@@ -21,5 +21,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
 
 @QuantityType(0, 1, -3, 0)
 data class Jerk(
-    override var value: Double
+    override val value: Double
 ) : Quantity(0, 1, -3, 0, value)
