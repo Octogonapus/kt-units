@@ -27,7 +27,7 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("kgFM", 0.102),
     QuantityConversion("lbFFt", 0.7376),
     QuantityConversion("lbFIn", 0.113),
-    QuantityConversion("ozFIn", (7.062 * 1e-3))
+    QuantityConversion("ozFIn", 7.062 * 1e-3)
 )
 data class Torque(
     override val value: Double

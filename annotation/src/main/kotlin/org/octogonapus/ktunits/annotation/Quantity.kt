@@ -119,3 +119,81 @@ operator fun Quantity.div(other: Quantity) =
         angleDim - other.angleDim,
         value / other.value
     )
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.sin() = kotlin.math.sin(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.cos() = kotlin.math.cos(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.tan() = kotlin.math.tan(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.asin() = kotlin.math.asin(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.acos() = kotlin.math.acos(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.atan() = kotlin.math.atan(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.sinh() = kotlin.math.sinh(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.cosh() = kotlin.math.cosh(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.tanh() = kotlin.math.tanh(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.asinh() = kotlin.math.asinh(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.acosh() = kotlin.math.acosh(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.atanh() = kotlin.math.atanh(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.sqrt() = kotlin.math.sqrt(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.exp() = kotlin.math.exp(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.expm1() = kotlin.math.expm1(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.log(base: Double) = kotlin.math.log(value, base)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.ln() = kotlin.math.ln(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.log10() = kotlin.math.log10(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.log2() = kotlin.math.log2(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.ln1p() = kotlin.math.ln1p(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.ceil() = kotlin.math.ceil(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.floor() = kotlin.math.floor(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.truncate() = kotlin.math.truncate(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.round() = kotlin.math.round(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.abs() = kotlin.math.abs(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.sign() = kotlin.math.sign(value)
