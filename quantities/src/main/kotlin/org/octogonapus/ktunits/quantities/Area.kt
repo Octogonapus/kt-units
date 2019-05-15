@@ -21,7 +21,7 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(0, 2, 0, 0)
+@QuantityType(0.0, 2.0, 0.0, 0.0)
 @QuantityConversions(
     QuantityConversion("sqMeter", 1.0),
     QuantityConversion("sqInch", 6.452 * 1e-4),

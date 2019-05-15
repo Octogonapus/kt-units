@@ -37,6 +37,7 @@ import kotlin.math.ln1p
 import kotlin.math.log
 import kotlin.math.log10
 import kotlin.math.log2
+import kotlin.math.pow
 import kotlin.math.round
 import kotlin.math.sign
 import kotlin.math.sin
@@ -175,7 +176,19 @@ internal class QuantityTest {
     @Test
     fun `test sqrt`() {
         val value = 1.3
-        assertEquals(sqrt(value), Quantity(0, 0, 0, 0, value).sqrt())
+        assertEquals(
+            Quantity(1, 2, 3, 4, sqrt(value)),
+            Quantity(2, 4, 6, 8, value).sqrt()
+        )
+    }
+
+    @Test
+    fun `test pow`() {
+        val value = 1.3
+        assertEquals(
+            Quantity(4, 8, 12, 16, value.pow(2)),
+            Quantity(2, 4, 6, 8, value).pow(2)
+        )
     }
 
     @Test
@@ -224,36 +237,51 @@ internal class QuantityTest {
     @Test
     fun `test ceil`() {
         val value = 1.3
-        assertEquals(ceil(value), Quantity(0, 0, 0, 0, value).ceil())
+        assertEquals(
+            Quantity(1, 1, 1, 1, ceil(value)),
+            Quantity(1, 1, 1, 1, value).ceil()
+        )
     }
 
     @Test
     fun `test floor`() {
         val value = 1.3
-        assertEquals(floor(value), Quantity(0, 0, 0, 0, value).floor())
+        assertEquals(
+            Quantity(1, 1, 1, 1, floor(value)),
+            Quantity(1, 1, 1, 1, value).floor()
+        )
     }
 
     @Test
     fun `test truncate`() {
         val value = 1.3
-        assertEquals(truncate(value), Quantity(0, 0, 0, 0, value).truncate())
+        assertEquals(
+            Quantity(1, 1, 1, 1, truncate(value)),
+            Quantity(1, 1, 1, 1, value).truncate()
+        )
     }
 
     @Test
     fun `test round`() {
         val value = 1.3
-        assertEquals(round(value), Quantity(0, 0, 0, 0, value).round())
+        assertEquals(
+            Quantity(1, 1, 1, 1, round(value)),
+            Quantity(1, 1, 1, 1, value).round()
+        )
     }
 
     @Test
     fun `test abs`() {
         val value = 1.3
-        assertEquals(abs(value), Quantity(0, 0, 0, 0, value).abs())
+        assertEquals(
+            Quantity(1, 1, 1, 1, abs(value)),
+            Quantity(1, 1, 1, 1, value).abs()
+        )
     }
 
     @Test
     fun `test sign`() {
         val value = 1.3
-        assertEquals(sign(value), Quantity(0, 0, 0, 0, value).sign())
+        assertEquals(sign(value), Quantity(1, 1, 1, 1, value).sign())
     }
 }

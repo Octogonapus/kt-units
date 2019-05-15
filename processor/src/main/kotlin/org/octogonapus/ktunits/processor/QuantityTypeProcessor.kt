@@ -67,8 +67,8 @@ class QuantityTypeProcessor : AbstractProcessor() {
             ElementWithDimensions(it, it.getDimensionData())
         }
 
-        val allFunBuilders = mutableListOf<FunSpec>()
-        val allPropBuilders = mutableListOf<PropertySpec>()
+        val allFunctions = mutableListOf<FunSpec>()
+        val allProperties = mutableListOf<PropertySpec>()
 
         val cartesianProduct = ListK.applicative()
             .tupled(annotatedClassesToDimensions.k(), annotatedClassesToDimensions.k())
@@ -77,36 +77,45 @@ class QuantityTypeProcessor : AbstractProcessor() {
         cartesianProduct.forEach {
             // Emitting multiple functions here will cause conflicting declarations, but it helps
             // the user know the root cause
-            it.a.isMultiplyCompatible(it.b, annotatedClassesToDimensions).forEach { returnType ->
-                allFunBuilders.add(
-                    buildMultiplyFun(it.a, it.b, returnType)
-                )
-            }
-        }
+            annotatedClassesToDimensions.forEach { returnType ->
+                if (it.a.isMultiplyCompatible(it.b, returnType)) {
+                    allFunctions.add(buildMultiplyFun(it.a, it.b, returnType))
+                }
 
-        cartesianProduct.forEach {
-            // Emitting multiple functions here will cause conflicting declarations, but it helps
-            // the user know the root cause
-            it.a.isDivideCompatible(it.b, annotatedClassesToDimensions).forEach { returnType ->
-                allFunBuilders.add(
-                    buildDivideFun(it.a, it.b, returnType)
-                )
+                if (it.a.isDivideCompatible(it.b, returnType)) {
+                    allFunctions.add(buildDivideFun(it.a, it.b, returnType))
+                }
+            }
+
+            if (it.a.isSqrtCompatible(it.b)) {
+                allFunctions.add(buildSqrtFun(it.a.typeName, it.b.typeName))
+            }
+
+            if (it.a.isPowCompatible(it.b, 2.0)) {
+                allFunctions.add(buildSquaredFun(it.a.typeName, it.b.typeName))
+            }
+
+            if (it.a.isPowCompatible(it.b, 3.0)) {
+                allFunctions.add(buildCubedFun(it.a.typeName, it.b.typeName))
             }
         }
 
         annotatedTypeClasses.forEach { element ->
             val typeName = element.asType().asTypeName()
-            allFunBuilders.add(buildPlusFun(typeName))
-            allFunBuilders.add(buildMinusFun(typeName))
-        }
+            allFunctions.add(buildPlusFun(typeName))
+            allFunctions.add(buildMinusFun(typeName))
+            allFunctions.add(buildCeilFun(typeName))
+            allFunctions.add(buildFloorFun(typeName))
+            allFunctions.add(buildTruncateFun(typeName))
+            allFunctions.add(buildRoundFun(typeName))
+            allFunctions.add(buildAbsFun(typeName))
 
-        annotatedTypeClasses.forEach { element ->
             val conversions = element.getAnnotation(QuantityConversions::class.java)
             val conversionFuns = conversions?.values?.flatMap {
                 buildConversionFuns(element.asType().asTypeName(), it)
             }
 
-            conversionFuns?.let { allPropBuilders.addAll(it) }
+            conversionFuns?.let { allProperties.addAll(it) }
         }
 
         val file = File(generatedSourcesRoot)
@@ -117,8 +126,8 @@ class QuantityTypeProcessor : AbstractProcessor() {
             "GeneratedQuantities"
         )
 
-        allFunBuilders.forEach { fileSpecBuilder.addFunction(it) }
-        allPropBuilders.forEach { fileSpecBuilder.addProperty(it) }
+        allFunctions.forEach { fileSpecBuilder.addFunction(it) }
+        allProperties.forEach { fileSpecBuilder.addProperty(it) }
 
         fileSpecBuilder.build().writeTo(file)
 
@@ -150,9 +159,9 @@ class QuantityTypeProcessor : AbstractProcessor() {
         parameterType: ElementWithDimensions,
         returnType: ElementWithDimensions
     ) = buildMultiplyOrDivideFun(
-        receiverType.element.asType().asTypeName(),
-        parameterType.element.asType().asTypeName(),
-        returnType.element.asType().asTypeName(),
+        receiverType.typeName,
+        parameterType.typeName,
+        returnType.typeName,
         "times",
         '*'
     )
@@ -162,9 +171,9 @@ class QuantityTypeProcessor : AbstractProcessor() {
         parameterType: ElementWithDimensions,
         returnType: ElementWithDimensions
     ) = buildMultiplyOrDivideFun(
-        receiverType.element.asType().asTypeName(),
-        parameterType.element.asType().asTypeName(),
-        returnType.element.asType().asTypeName(),
+        receiverType.typeName,
+        parameterType.typeName,
+        returnType.typeName,
         "div",
         '/'
     )
@@ -205,6 +214,121 @@ class QuantityTypeProcessor : AbstractProcessor() {
             |return %T(value $op other.value)
             """.trimMargin(),
             returnType
+        )
+        .build()
+
+    private fun buildSqrtFun(
+        receiverType: TypeName,
+        returnType: TypeName
+    ) = FunSpec.builder("sqrt")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(returnType)
+        .addStatement(
+            """
+            |return %T(kotlin.math.sqrt(value))
+            """.trimMargin(),
+            returnType
+        )
+        .build()
+
+    private fun buildSquaredFun(
+        receiverType: TypeName,
+        returnType: TypeName
+    ) = FunSpec.builder("squared")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(returnType)
+        .addStatement(
+            """
+            |return %T(Math.pow(value, 2.0))
+            """.trimMargin(),
+            returnType
+        )
+        .build()
+
+    private fun buildCubedFun(
+        receiverType: TypeName,
+        returnType: TypeName
+    ) = FunSpec.builder("cubed")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(returnType)
+        .addStatement(
+            """
+            |return %T(Math.pow(value, 3.0))
+            """.trimMargin(),
+            returnType
+        )
+        .build()
+
+    private fun buildCeilFun(
+        receiverType: TypeName
+    ) = FunSpec.builder("ceil")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(receiverType)
+        .addStatement(
+            """
+            |return %T(kotlin.math.ceil(value))
+            """.trimMargin(),
+            receiverType
+        )
+        .build()
+
+    private fun buildFloorFun(
+        receiverType: TypeName
+    ) = FunSpec.builder("floor")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(receiverType)
+        .addStatement(
+            """
+            |return %T(kotlin.math.floor(value))
+            """.trimMargin(),
+            receiverType
+        )
+        .build()
+
+    private fun buildTruncateFun(
+        receiverType: TypeName
+    ) = FunSpec.builder("truncate")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(receiverType)
+        .addStatement(
+            """
+            |return %T(kotlin.math.truncate(value))
+            """.trimMargin(),
+            receiverType
+        )
+        .build()
+
+    private fun buildRoundFun(
+        receiverType: TypeName
+    ) = FunSpec.builder("round")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(receiverType)
+        .addStatement(
+            """
+            |return %T(kotlin.math.round(value))
+            """.trimMargin(),
+            receiverType
+        )
+        .build()
+
+    private fun buildAbsFun(
+        receiverType: TypeName
+    ) = FunSpec.builder("abs")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(receiverType)
+        .addStatement(
+            """
+            |return %T(kotlin.math.abs(value))
+            """.trimMargin(),
+            receiverType
         )
         .build()
 

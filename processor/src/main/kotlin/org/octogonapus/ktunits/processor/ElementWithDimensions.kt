@@ -16,19 +16,34 @@
  */
 package org.octogonapus.ktunits.processor
 
+import com.squareup.kotlinpoet.asTypeName
 import javax.lang.model.element.Element
 
 internal data class ElementWithDimensions(
     val element: Element,
     val dimensions: DimensionData
-)
+) {
+
+    val typeName by lazy {
+        element.asType().asTypeName()
+    }
+}
 
 internal fun ElementWithDimensions.isMultiplyCompatible(
     other: ElementWithDimensions,
-    possibleReturnTypes: List<ElementWithDimensions>
-) = possibleReturnTypes.filter { dimensions + other.dimensions == it.dimensions }
+    possibleReturnType: ElementWithDimensions
+) = dimensions + other.dimensions == possibleReturnType.dimensions
 
 internal fun ElementWithDimensions.isDivideCompatible(
     other: ElementWithDimensions,
-    possibleReturnTypes: List<ElementWithDimensions>
-) = possibleReturnTypes.filter { dimensions - other.dimensions == it.dimensions }
+    possibleReturnType: ElementWithDimensions
+) = dimensions - other.dimensions == possibleReturnType.dimensions
+
+internal fun ElementWithDimensions.isSqrtCompatible(
+    other: ElementWithDimensions
+) = dimensions / 2.0 == other.dimensions
+
+internal fun ElementWithDimensions.isPowCompatible(
+    other: ElementWithDimensions,
+    power: Double
+) = dimensions * power == other.dimensions

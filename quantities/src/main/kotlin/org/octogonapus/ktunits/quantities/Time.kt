@@ -21,7 +21,7 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(0, 0, 1, 0)
+@QuantityType(0.0, 0.0, 1.0, 0.0)
 @QuantityConversions(
     QuantityConversion("gigasecond", 1e+9),
     QuantityConversion("megasecond", 1e+6),

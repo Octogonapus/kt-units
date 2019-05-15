@@ -20,10 +20,10 @@ import org.octogonapus.ktunits.annotation.QuantityType
 import javax.lang.model.element.Element
 
 internal data class DimensionData(
-    val massDim: Long,
-    val lengthDim: Long,
-    val timeDim: Long,
-    val angleDim: Long
+    val massDim: Double,
+    val lengthDim: Double,
+    val timeDim: Double,
+    val angleDim: Double
 ) {
 
     operator fun plus(other: DimensionData) =
@@ -40,6 +40,22 @@ internal data class DimensionData(
             lengthDim - other.lengthDim,
             timeDim - other.timeDim,
             angleDim - other.angleDim
+        )
+
+    operator fun times(factor: Double) =
+        DimensionData(
+            massDim * factor,
+            lengthDim * factor,
+            timeDim * factor,
+            angleDim * factor
+        )
+
+    operator fun div(denom: Double) =
+        DimensionData(
+            massDim / denom,
+            lengthDim / denom,
+            timeDim / denom,
+            angleDim / denom
         )
 }
 
