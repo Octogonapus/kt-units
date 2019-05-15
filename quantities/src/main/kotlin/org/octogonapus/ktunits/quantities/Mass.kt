@@ -21,7 +21,7 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(1, 0, 0, 0)
+@QuantityType(1.0, 0.0, 0.0, 0.0)
 @QuantityConversions(
     QuantityConversion("gigagram", 1e+6),
     QuantityConversion("megagram", 1e+3),

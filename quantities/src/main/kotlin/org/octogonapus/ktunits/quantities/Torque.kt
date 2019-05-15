@@ -21,7 +21,7 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(1, 2, -2, 0)
+@QuantityType(1.0, 2.0, -2.0, 0.0)
 @QuantityConversions(
     QuantityConversion("nM", 1.0),
     QuantityConversion("kgFM", 0.102),

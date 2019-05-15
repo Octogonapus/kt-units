@@ -17,12 +17,26 @@
 package org.octogonapus.ktunits.annotation
 
 open class Quantity(
-    val massDim: Long,
-    val lengthDim: Long,
-    val timeDim: Long,
-    val angleDim: Long,
+    val massDim: Double,
+    val lengthDim: Double,
+    val timeDim: Double,
+    val angleDim: Double,
     open val value: Double
 ) {
+
+    constructor(
+        massDim: Number,
+        lengthDim: Number,
+        timeDim: Number,
+        angleDim: Number,
+        value: Number
+    ) : this(
+        massDim = massDim.toDouble(),
+        lengthDim = lengthDim.toDouble(),
+        timeDim = timeDim.toDouble(),
+        angleDim = angleDim.toDouble(),
+        value = value.toDouble()
+    )
 
     fun dimensionsEqual(other: Quantity) =
         massDim == other.massDim && lengthDim == other.lengthDim && timeDim == other.timeDim &&
@@ -156,8 +170,13 @@ inline fun Quantity.acosh() = kotlin.math.acosh(value)
 @Suppress("NOTHING_TO_INLINE")
 inline fun Quantity.atanh() = kotlin.math.atanh(value)
 
-@Suppress("NOTHING_TO_INLINE")
-inline fun Quantity.sqrt() = kotlin.math.sqrt(value)
+fun Quantity.sqrt() = Quantity(
+    massDim / 2,
+    lengthDim / 2,
+    timeDim / 2,
+    angleDim / 2,
+    kotlin.math.sqrt(value)
+)
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun Quantity.exp() = kotlin.math.exp(value)
@@ -179,21 +198,6 @@ inline fun Quantity.log2() = kotlin.math.log2(value)
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun Quantity.ln1p() = kotlin.math.ln1p(value)
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun Quantity.ceil() = kotlin.math.ceil(value)
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun Quantity.floor() = kotlin.math.floor(value)
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun Quantity.truncate() = kotlin.math.truncate(value)
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun Quantity.round() = kotlin.math.round(value)
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun Quantity.abs() = kotlin.math.abs(value)
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun Quantity.sign() = kotlin.math.sign(value)

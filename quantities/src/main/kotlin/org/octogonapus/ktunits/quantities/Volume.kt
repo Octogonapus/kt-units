@@ -21,7 +21,7 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(0, 3, 0, 0)
+@QuantityType(0.0, 3.0, 0.0, 0.0)
 @QuantityConversions(
     QuantityConversion("cubicMeter", 1.0),
     QuantityConversion("cubicCentimeter", 1e-6),

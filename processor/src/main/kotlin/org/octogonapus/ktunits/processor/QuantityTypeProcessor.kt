@@ -109,6 +109,15 @@ class QuantityTypeProcessor : AbstractProcessor() {
             conversionFuns?.let { allPropBuilders.addAll(it) }
         }
 
+        // sqrt, ceil, floor, truncate, round, abs
+        cartesianProduct.forEach {
+            if (it.a.isSqrtCompatible(it.b)) {
+                allFunBuilders.add(
+                    buildSqrtFun(it.a.element.asType().asTypeName(), it.b.element.asType().asTypeName())
+                )
+            }
+        }
+
         val file = File(generatedSourcesRoot)
         file.mkdir()
 
@@ -203,6 +212,21 @@ class QuantityTypeProcessor : AbstractProcessor() {
         .addStatement(
             """
             |return %T(value $op other.value)
+            """.trimMargin(),
+            returnType
+        )
+        .build()
+
+    private fun buildSqrtFun(
+        receiverType: TypeName,
+        returnType: TypeName
+    ) = FunSpec.builder("sqrt")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(returnType)
+        .addStatement(
+            """
+            |return %T(kotlin.math.sqrt(value))
             """.trimMargin(),
             returnType
         )

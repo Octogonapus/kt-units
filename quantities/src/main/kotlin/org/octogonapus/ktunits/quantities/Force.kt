@@ -21,7 +21,7 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(1, 1, -2, 0)
+@QuantityType(1.0, 1.0, -2.0, 0.0)
 @QuantityConversions(
     QuantityConversion("newton", 1.0),
     QuantityConversion("dyn", 1e-5),

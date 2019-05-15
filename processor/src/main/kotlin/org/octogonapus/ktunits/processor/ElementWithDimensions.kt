@@ -32,3 +32,7 @@ internal fun ElementWithDimensions.isDivideCompatible(
     other: ElementWithDimensions,
     possibleReturnTypes: List<ElementWithDimensions>
 ) = possibleReturnTypes.filter { dimensions - other.dimensions == it.dimensions }
+
+internal fun ElementWithDimensions.isSqrtCompatible(
+    other: ElementWithDimensions
+) = dimensions / 2.0 == other.dimensions
