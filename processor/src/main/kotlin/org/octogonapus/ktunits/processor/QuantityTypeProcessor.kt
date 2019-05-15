@@ -109,11 +109,22 @@ class QuantityTypeProcessor : AbstractProcessor() {
             conversionFuns?.let { allProperties.addAll(it) }
         }
 
-        // sqrt, ceil, floor, truncate, round, abs
         cartesianProduct.forEach {
             if (it.a.isSqrtCompatible(it.b)) {
                 allFunctions.add(
-                    buildSqrtFun(it.a.element.asType().asTypeName(), it.b.element.asType().asTypeName())
+                    buildSqrtFun(it.a.typeName, it.b.typeName)
+                )
+            }
+
+            if (it.a.isPowCompatible(it.b, 2.0)) {
+                allFunctions.add(
+                    buildSquaredFun(it.a.typeName, it.b.typeName)
+                )
+            }
+
+            if (it.a.isPowCompatible(it.b, 3.0)) {
+                allFunctions.add(
+                    buildCubedFun(it.a.typeName, it.b.typeName)
                 )
             }
         }
@@ -168,9 +179,9 @@ class QuantityTypeProcessor : AbstractProcessor() {
         parameterType: ElementWithDimensions,
         returnType: ElementWithDimensions
     ) = buildMultiplyOrDivideFun(
-        receiverType.element.asType().asTypeName(),
-        parameterType.element.asType().asTypeName(),
-        returnType.element.asType().asTypeName(),
+        receiverType.typeName,
+        parameterType.typeName,
+        returnType.typeName,
         "times",
         '*'
     )
@@ -180,9 +191,9 @@ class QuantityTypeProcessor : AbstractProcessor() {
         parameterType: ElementWithDimensions,
         returnType: ElementWithDimensions
     ) = buildMultiplyOrDivideFun(
-        receiverType.element.asType().asTypeName(),
-        parameterType.element.asType().asTypeName(),
-        returnType.element.asType().asTypeName(),
+        receiverType.typeName,
+        parameterType.typeName,
+        returnType.typeName,
         "div",
         '/'
     )
@@ -236,6 +247,36 @@ class QuantityTypeProcessor : AbstractProcessor() {
         .addStatement(
             """
             |return %T(kotlin.math.sqrt(value))
+            """.trimMargin(),
+            returnType
+        )
+        .build()
+
+    private fun buildSquaredFun(
+        receiverType: TypeName,
+        returnType: TypeName
+    ) = FunSpec.builder("squared")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(returnType)
+        .addStatement(
+            """
+            |return %T(Math.pow(value, 2.0))
+            """.trimMargin(),
+            returnType
+        )
+        .build()
+
+    private fun buildCubedFun(
+        receiverType: TypeName,
+        returnType: TypeName
+    ) = FunSpec.builder("cubed")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(returnType)
+        .addStatement(
+            """
+            |return %T(Math.pow(value, 3.0))
             """.trimMargin(),
             returnType
         )

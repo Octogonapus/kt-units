@@ -37,6 +37,7 @@ import kotlin.math.ln1p
 import kotlin.math.log
 import kotlin.math.log10
 import kotlin.math.log2
+import kotlin.math.pow
 import kotlin.math.round
 import kotlin.math.sign
 import kotlin.math.sin
@@ -178,6 +179,15 @@ internal class QuantityTest {
         assertEquals(
             Quantity(1, 2, 3, 4, sqrt(value)),
             Quantity(2, 4, 6, 8, value).sqrt()
+        )
+    }
+
+    @Test
+    fun `test pow`() {
+        val value = 1.3
+        assertEquals(
+            Quantity(4, 8, 12, 16, value.pow(2)),
+            Quantity(2, 4, 6, 8, value).pow(2)
         )
     }
 

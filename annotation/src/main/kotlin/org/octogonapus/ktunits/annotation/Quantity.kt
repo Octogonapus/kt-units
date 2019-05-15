@@ -16,6 +16,8 @@
  */
 package org.octogonapus.ktunits.annotation
 
+import kotlin.math.pow
+
 open class Quantity(
     val massDim: Double,
     val lengthDim: Double,
@@ -177,6 +179,16 @@ fun Quantity.sqrt() = Quantity(
     angleDim / 2,
     kotlin.math.sqrt(value)
 )
+
+fun Quantity.pow(exp: Double) = Quantity(
+    massDim * exp,
+    lengthDim * exp,
+    timeDim * exp,
+    angleDim * exp,
+    value.pow(exp)
+)
+
+fun Quantity.pow(exp: Number) = pow(exp.toDouble())
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun Quantity.exp() = kotlin.math.exp(value)
