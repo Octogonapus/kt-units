@@ -19,26 +19,32 @@ package org.octogonapus.ktunits.annotation
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.acosh
 import kotlin.math.asin
 import kotlin.math.asinh
 import kotlin.math.atan
 import kotlin.math.atanh
+import kotlin.math.ceil
 import kotlin.math.cos
 import kotlin.math.cosh
 import kotlin.math.exp
 import kotlin.math.expm1
+import kotlin.math.floor
 import kotlin.math.ln
 import kotlin.math.ln1p
 import kotlin.math.log
 import kotlin.math.log10
 import kotlin.math.log2
+import kotlin.math.round
 import kotlin.math.sign
 import kotlin.math.sin
 import kotlin.math.sinh
+import kotlin.math.sqrt
 import kotlin.math.tan
 import kotlin.math.tanh
+import kotlin.math.truncate
 
 internal class QuantityTest {
 
@@ -166,11 +172,14 @@ internal class QuantityTest {
         assertEquals(atanh(value), Quantity(0, 0, 0, 0, value).atanh())
     }
 
-    // @Test
-    // fun `test sqrt`() {
-    //     val value = 1.3
-    //     assertEquals(sqrt(value), Quantity(0, 0, 0, 0, value).sqrt())
-    // }
+    @Test
+    fun `test sqrt`() {
+        val value = 1.3
+        assertEquals(
+            Quantity(1, 2, 3, 4, sqrt(value)),
+            Quantity(2, 4, 6, 8, value).sqrt()
+        )
+    }
 
     @Test
     fun `test exp`() {
@@ -215,39 +224,54 @@ internal class QuantityTest {
         assertEquals(ln1p(value), Quantity(0, 0, 0, 0, value).ln1p())
     }
 
-    // @Test
-    // fun `test ceil`() {
-    //     val value = 1.3
-    //     assertEquals(ceil(value), Quantity(0, 0, 0, 0, value).ceil())
-    // }
-    //
-    // @Test
-    // fun `test floor`() {
-    //     val value = 1.3
-    //     assertEquals(floor(value), Quantity(0, 0, 0, 0, value).floor())
-    // }
-    //
-    // @Test
-    // fun `test truncate`() {
-    //     val value = 1.3
-    //     assertEquals(truncate(value), Quantity(0, 0, 0, 0, value).truncate())
-    // }
-    //
-    // @Test
-    // fun `test round`() {
-    //     val value = 1.3
-    //     assertEquals(round(value), Quantity(0, 0, 0, 0, value).round())
-    // }
-    //
-    // @Test
-    // fun `test abs`() {
-    //     val value = 1.3
-    //     assertEquals(abs(value), Quantity(0, 0, 0, 0, value).abs())
-    // }
+    @Test
+    fun `test ceil`() {
+        val value = 1.3
+        assertEquals(
+            Quantity(1, 1, 1, 1, ceil(value)),
+            Quantity(1, 1, 1, 1, value).ceil()
+        )
+    }
+
+    @Test
+    fun `test floor`() {
+        val value = 1.3
+        assertEquals(
+            Quantity(1, 1, 1, 1, floor(value)),
+            Quantity(1, 1, 1, 1, value).floor()
+        )
+    }
+
+    @Test
+    fun `test truncate`() {
+        val value = 1.3
+        assertEquals(
+            Quantity(1, 1, 1, 1, truncate(value)),
+            Quantity(1, 1, 1, 1, value).truncate()
+        )
+    }
+
+    @Test
+    fun `test round`() {
+        val value = 1.3
+        assertEquals(
+            Quantity(1, 1, 1, 1, round(value)),
+            Quantity(1, 1, 1, 1, value).round()
+        )
+    }
+
+    @Test
+    fun `test abs`() {
+        val value = 1.3
+        assertEquals(
+            Quantity(1, 1, 1, 1, abs(value)),
+            Quantity(1, 1, 1, 1, value).abs()
+        )
+    }
 
     @Test
     fun `test sign`() {
         val value = 1.3
-        assertEquals(sign(value), Quantity(0, 0, 0, 0, value).sign())
+        assertEquals(sign(value), Quantity(1, 1, 1, 1, value).sign())
     }
 }

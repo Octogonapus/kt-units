@@ -67,8 +67,8 @@ class QuantityTypeProcessor : AbstractProcessor() {
             ElementWithDimensions(it, it.getDimensionData())
         }
 
-        val allFunBuilders = mutableListOf<FunSpec>()
-        val allPropBuilders = mutableListOf<PropertySpec>()
+        val allFunctions = mutableListOf<FunSpec>()
+        val allProperties = mutableListOf<PropertySpec>()
 
         val cartesianProduct = ListK.applicative()
             .tupled(annotatedClassesToDimensions.k(), annotatedClassesToDimensions.k())
@@ -78,7 +78,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
             // Emitting multiple functions here will cause conflicting declarations, but it helps
             // the user know the root cause
             it.a.isMultiplyCompatible(it.b, annotatedClassesToDimensions).forEach { returnType ->
-                allFunBuilders.add(
+                allFunctions.add(
                     buildMultiplyFun(it.a, it.b, returnType)
                 )
             }
@@ -88,7 +88,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
             // Emitting multiple functions here will cause conflicting declarations, but it helps
             // the user know the root cause
             it.a.isDivideCompatible(it.b, annotatedClassesToDimensions).forEach { returnType ->
-                allFunBuilders.add(
+                allFunctions.add(
                     buildDivideFun(it.a, it.b, returnType)
                 )
             }
@@ -96,8 +96,8 @@ class QuantityTypeProcessor : AbstractProcessor() {
 
         annotatedTypeClasses.forEach { element ->
             val typeName = element.asType().asTypeName()
-            allFunBuilders.add(buildPlusFun(typeName))
-            allFunBuilders.add(buildMinusFun(typeName))
+            allFunctions.add(buildPlusFun(typeName))
+            allFunctions.add(buildMinusFun(typeName))
         }
 
         annotatedTypeClasses.forEach { element ->
@@ -106,16 +106,25 @@ class QuantityTypeProcessor : AbstractProcessor() {
                 buildConversionFuns(element.asType().asTypeName(), it)
             }
 
-            conversionFuns?.let { allPropBuilders.addAll(it) }
+            conversionFuns?.let { allProperties.addAll(it) }
         }
 
         // sqrt, ceil, floor, truncate, round, abs
         cartesianProduct.forEach {
             if (it.a.isSqrtCompatible(it.b)) {
-                allFunBuilders.add(
+                allFunctions.add(
                     buildSqrtFun(it.a.element.asType().asTypeName(), it.b.element.asType().asTypeName())
                 )
             }
+        }
+
+        annotatedTypeClasses.forEach { element ->
+            val typeName = element.asType().asTypeName()
+            allFunctions.add(buildCeilFun(typeName))
+            allFunctions.add(buildFloorFun(typeName))
+            allFunctions.add(buildTruncateFun(typeName))
+            allFunctions.add(buildRoundFun(typeName))
+            allFunctions.add(buildAbsFun(typeName))
         }
 
         val file = File(generatedSourcesRoot)
@@ -126,8 +135,8 @@ class QuantityTypeProcessor : AbstractProcessor() {
             "GeneratedQuantities"
         )
 
-        allFunBuilders.forEach { fileSpecBuilder.addFunction(it) }
-        allPropBuilders.forEach { fileSpecBuilder.addProperty(it) }
+        allFunctions.forEach { fileSpecBuilder.addFunction(it) }
+        allProperties.forEach { fileSpecBuilder.addProperty(it) }
 
         fileSpecBuilder.build().writeTo(file)
 
@@ -229,6 +238,76 @@ class QuantityTypeProcessor : AbstractProcessor() {
             |return %T(kotlin.math.sqrt(value))
             """.trimMargin(),
             returnType
+        )
+        .build()
+
+    private fun buildCeilFun(
+        receiverType: TypeName
+    ) = FunSpec.builder("ceil")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(receiverType)
+        .addStatement(
+            """
+            |return %T(kotlin.math.ceil(value))
+            """.trimMargin(),
+            receiverType
+        )
+        .build()
+
+    private fun buildFloorFun(
+        receiverType: TypeName
+    ) = FunSpec.builder("floor")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(receiverType)
+        .addStatement(
+            """
+            |return %T(kotlin.math.floor(value))
+            """.trimMargin(),
+            receiverType
+        )
+        .build()
+
+    private fun buildTruncateFun(
+        receiverType: TypeName
+    ) = FunSpec.builder("truncate")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(receiverType)
+        .addStatement(
+            """
+            |return %T(kotlin.math.truncate(value))
+            """.trimMargin(),
+            receiverType
+        )
+        .build()
+
+    private fun buildRoundFun(
+        receiverType: TypeName
+    ) = FunSpec.builder("round")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(receiverType)
+        .addStatement(
+            """
+            |return %T(kotlin.math.round(value))
+            """.trimMargin(),
+            receiverType
+        )
+        .build()
+
+    private fun buildAbsFun(
+        receiverType: TypeName
+    ) = FunSpec.builder("abs")
+        .addModifiers(KModifier.PUBLIC, KModifier.INLINE)
+        .receiver(receiverType)
+        .returns(receiverType)
+        .addStatement(
+            """
+            |return %T(kotlin.math.abs(value))
+            """.trimMargin(),
+            receiverType
         )
         .build()
 

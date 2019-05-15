@@ -199,5 +199,15 @@ inline fun Quantity.log2() = kotlin.math.log2(value)
 @Suppress("NOTHING_TO_INLINE")
 inline fun Quantity.ln1p() = kotlin.math.ln1p(value)
 
+fun Quantity.ceil() = Quantity(massDim, lengthDim, timeDim, angleDim, kotlin.math.ceil(value))
+
+fun Quantity.floor() = Quantity(massDim, lengthDim, timeDim, angleDim, kotlin.math.floor(value))
+
+fun Quantity.truncate() = Quantity(massDim, lengthDim, timeDim, angleDim, kotlin.math.truncate(value))
+
+fun Quantity.round() = Quantity(massDim, lengthDim, timeDim, angleDim, kotlin.math.round(value))
+
+fun Quantity.abs() = Quantity(massDim, lengthDim, timeDim, angleDim, kotlin.math.abs(value))
+
 @Suppress("NOTHING_TO_INLINE")
 inline fun Quantity.sign() = kotlin.math.sign(value)
