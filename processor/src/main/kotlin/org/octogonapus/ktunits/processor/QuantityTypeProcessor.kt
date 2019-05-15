@@ -77,20 +77,26 @@ class QuantityTypeProcessor : AbstractProcessor() {
         cartesianProduct.forEach {
             // Emitting multiple functions here will cause conflicting declarations, but it helps
             // the user know the root cause
-            it.a.isMultiplyCompatible(it.b, annotatedClassesToDimensions).forEach { returnType ->
-                allFunctions.add(
-                    buildMultiplyFun(it.a, it.b, returnType)
-                )
-            }
-        }
+            annotatedClassesToDimensions.forEach { returnType ->
+                if (it.a.isMultiplyCompatible(it.b, returnType)) {
+                    allFunctions.add(buildMultiplyFun(it.a, it.b, returnType))
+                }
 
-        cartesianProduct.forEach {
-            // Emitting multiple functions here will cause conflicting declarations, but it helps
-            // the user know the root cause
-            it.a.isDivideCompatible(it.b, annotatedClassesToDimensions).forEach { returnType ->
-                allFunctions.add(
-                    buildDivideFun(it.a, it.b, returnType)
-                )
+                if (it.a.isDivideCompatible(it.b, returnType)) {
+                    allFunctions.add(buildDivideFun(it.a, it.b, returnType))
+                }
+            }
+
+            if (it.a.isSqrtCompatible(it.b)) {
+                allFunctions.add(buildSqrtFun(it.a.typeName, it.b.typeName))
+            }
+
+            if (it.a.isPowCompatible(it.b, 2.0)) {
+                allFunctions.add(buildSquaredFun(it.a.typeName, it.b.typeName))
+            }
+
+            if (it.a.isPowCompatible(it.b, 3.0)) {
+                allFunctions.add(buildCubedFun(it.a.typeName, it.b.typeName))
             }
         }
 
@@ -98,44 +104,18 @@ class QuantityTypeProcessor : AbstractProcessor() {
             val typeName = element.asType().asTypeName()
             allFunctions.add(buildPlusFun(typeName))
             allFunctions.add(buildMinusFun(typeName))
-        }
+            allFunctions.add(buildCeilFun(typeName))
+            allFunctions.add(buildFloorFun(typeName))
+            allFunctions.add(buildTruncateFun(typeName))
+            allFunctions.add(buildRoundFun(typeName))
+            allFunctions.add(buildAbsFun(typeName))
 
-        annotatedTypeClasses.forEach { element ->
             val conversions = element.getAnnotation(QuantityConversions::class.java)
             val conversionFuns = conversions?.values?.flatMap {
                 buildConversionFuns(element.asType().asTypeName(), it)
             }
 
             conversionFuns?.let { allProperties.addAll(it) }
-        }
-
-        cartesianProduct.forEach {
-            if (it.a.isSqrtCompatible(it.b)) {
-                allFunctions.add(
-                    buildSqrtFun(it.a.typeName, it.b.typeName)
-                )
-            }
-
-            if (it.a.isPowCompatible(it.b, 2.0)) {
-                allFunctions.add(
-                    buildSquaredFun(it.a.typeName, it.b.typeName)
-                )
-            }
-
-            if (it.a.isPowCompatible(it.b, 3.0)) {
-                allFunctions.add(
-                    buildCubedFun(it.a.typeName, it.b.typeName)
-                )
-            }
-        }
-
-        annotatedTypeClasses.forEach { element ->
-            val typeName = element.asType().asTypeName()
-            allFunctions.add(buildCeilFun(typeName))
-            allFunctions.add(buildFloorFun(typeName))
-            allFunctions.add(buildTruncateFun(typeName))
-            allFunctions.add(buildRoundFun(typeName))
-            allFunctions.add(buildAbsFun(typeName))
         }
 
         val file = File(generatedSourcesRoot)

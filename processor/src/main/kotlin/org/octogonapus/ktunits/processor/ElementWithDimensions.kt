@@ -31,13 +31,13 @@ internal data class ElementWithDimensions(
 
 internal fun ElementWithDimensions.isMultiplyCompatible(
     other: ElementWithDimensions,
-    possibleReturnTypes: List<ElementWithDimensions>
-) = possibleReturnTypes.filter { dimensions + other.dimensions == it.dimensions }
+    possibleReturnType: ElementWithDimensions
+) = dimensions + other.dimensions == possibleReturnType.dimensions
 
 internal fun ElementWithDimensions.isDivideCompatible(
     other: ElementWithDimensions,
-    possibleReturnTypes: List<ElementWithDimensions>
-) = possibleReturnTypes.filter { dimensions - other.dimensions == it.dimensions }
+    possibleReturnType: ElementWithDimensions
+) = dimensions - other.dimensions == possibleReturnType.dimensions
 
 internal fun ElementWithDimensions.isSqrtCompatible(
     other: ElementWithDimensions
