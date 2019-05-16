@@ -21,16 +21,7 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(
-    currentDim = 0.0,
-    tempDim = 0.0,
-    timeDim = -2.0,
-    lengthDim = -1.0,
-    massDim = 1.0,
-    luminDim = 0.0,
-    moleDim = 0.0,
-    angleDim = 0.0
-)
+@QuantityType(timeDim = -2.0, lengthDim = -1.0, massDim = 1.0)
 @QuantityConversions(
     QuantityConversion("pascal", 1.0),
     QuantityConversion("bar", 1e+5),
@@ -38,14 +29,4 @@ import org.octogonapus.ktunits.annotation.QuantityType
 )
 data class Pressure(
     override val value: Double
-) : Quantity(
-    currentDim = 0.0,
-    tempDim = 0.0,
-    timeDim = -2,
-    lengthDim = -1,
-    massDim = 1,
-    luminDim = 0.0,
-    moleDim = 0.0,
-    angleDim = 0,
-    value = value
-)
+) : Quantity(timeDim = -2.0, lengthDim = -1.0, massDim = 1.0, value = value)

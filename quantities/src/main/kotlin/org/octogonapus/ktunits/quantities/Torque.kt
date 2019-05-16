@@ -21,16 +21,7 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(
-    currentDim = 0.0,
-    tempDim = 0.0,
-    timeDim = -2.0,
-    lengthDim = 2.0,
-    massDim = 1.0,
-    luminDim = 0.0,
-    moleDim = 0.0,
-    angleDim = 0.0
-)
+@QuantityType(timeDim = -2.0, lengthDim = 2.0, massDim = 1.0)
 @QuantityConversions(
     QuantityConversion("nM", 1.0),
     QuantityConversion("kgFM", 0.102),
@@ -40,14 +31,4 @@ import org.octogonapus.ktunits.annotation.QuantityType
 )
 data class Torque(
     override val value: Double
-) : Quantity(
-    currentDim = 0.0,
-    tempDim = 0.0,
-    timeDim = -2,
-    lengthDim = 2,
-    massDim = 1,
-    luminDim = 0.0,
-    moleDim = 0.0,
-    angleDim = 0,
-    value = value
-)
+) : Quantity(timeDim = -2.0, lengthDim = 2.0, massDim = 1.0, value = value)

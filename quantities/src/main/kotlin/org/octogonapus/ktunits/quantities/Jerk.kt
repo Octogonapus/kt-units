@@ -19,26 +19,7 @@ package org.octogonapus.ktunits.quantities
 import org.octogonapus.ktunits.annotation.Quantity
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(
-    currentDim = 0.0,
-    tempDim = 0.0,
-    timeDim = -3.0,
-    lengthDim = 1.0,
-    massDim = 0.0,
-    luminDim = 0.0,
-    moleDim = 0.0,
-    angleDim = 0.0
-)
+@QuantityType(timeDim = -3.0, lengthDim = 1.0)
 data class Jerk(
     override val value: Double
-) : Quantity(
-    currentDim = 0.0,
-    tempDim = 0.0,
-    timeDim = -3,
-    lengthDim = 1,
-    massDim = 0,
-    luminDim = 0.0,
-    moleDim = 0.0,
-    angleDim = 0,
-    value = value
-)
+) : Quantity(timeDim = -3.0, lengthDim = 1.0, value = value)

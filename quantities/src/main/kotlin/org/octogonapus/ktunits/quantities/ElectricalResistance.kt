@@ -21,14 +21,12 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(timeDim = -2.0, lengthDim = 1.0, massDim = 1.0)
+@QuantityType(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -2.0)
 @QuantityConversions(
-    QuantityConversion("newton", 1.0),
-    QuantityConversion("dyn", 1e-5),
-    QuantityConversion("kp", 9.80665),
-    QuantityConversion("lbF", 4.448222),
-    QuantityConversion("pdl", 0.138255)
+    QuantityConversion("ohm", 1.0),
+    QuantityConversion("kiloohm", 1e+3),
+    QuantityConversion("megohm", 1e+6)
 )
-data class Force(
+data class ElectricalResistance(
     override val value: Double
-) : Quantity(timeDim = -2.0, lengthDim = 1.0, massDim = 1.0, value = value)
+) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -2.0, value = value)

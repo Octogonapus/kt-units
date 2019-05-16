@@ -21,16 +21,7 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(
-    currentDim = 0.0,
-    tempDim = 0.0,
-    timeDim = 0.0,
-    lengthDim = 2.0,
-    massDim = 0.0,
-    luminDim = 0.0,
-    moleDim = 0.0,
-    angleDim = 0.0
-)
+@QuantityType(lengthDim = 2.0)
 @QuantityConversions(
     QuantityConversion("sqMeter", 1.0),
     QuantityConversion("sqInch", 6.452 * 1e-4),
@@ -40,14 +31,4 @@ import org.octogonapus.ktunits.annotation.QuantityType
 )
 data class Area(
     override val value: Double
-) : Quantity(
-    currentDim = 0.0,
-    tempDim = 0.0,
-    timeDim = 0,
-    lengthDim = 2,
-    massDim = 0,
-    luminDim = 0.0,
-    moleDim = 0.0,
-    angleDim = 0,
-    value = value
-)
+) : Quantity(lengthDim = 2.0, value = value)

@@ -16,19 +16,28 @@
  */
 package org.octogonapus.ktunits.quantities
 
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import org.octogonapus.ktunits.annotation.Quantity
-import org.octogonapus.ktunits.annotation.QuantityConversion
-import org.octogonapus.ktunits.annotation.QuantityConversions
-import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(timeDim = -2.0, lengthDim = 1.0, massDim = 1.0)
-@QuantityConversions(
-    QuantityConversion("newton", 1.0),
-    QuantityConversion("dyn", 1e-5),
-    QuantityConversion("kp", 9.80665),
-    QuantityConversion("lbF", 4.448222),
-    QuantityConversion("pdl", 0.138255)
-)
-data class Force(
-    override val value: Double
-) : Quantity(timeDim = -2.0, lengthDim = 1.0, massDim = 1.0, value = value)
+internal class ElectricalResistanceTest {
+
+    @ParameterizedTest
+    @MethodSource("electricResistanceUnitsSource")
+    fun `electric resistance units tests`(expected: Quantity, actual: Quantity) {
+        assertEquals(expected, actual)
+    }
+
+    companion object {
+
+        @Suppress("unused")
+        @JvmStatic
+        fun electricResistanceUnitsSource() = listOf(
+            Arguments.of(1.ohm, 1.ohm),
+            Arguments.of(1.kiloohm, 1e+3.ohm),
+            Arguments.of(1.megohm, 1e+6.ohm)
+        )
+    }
+}

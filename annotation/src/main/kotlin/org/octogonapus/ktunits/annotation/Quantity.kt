@@ -21,26 +21,26 @@ package org.octogonapus.ktunits.annotation
 import kotlin.math.pow
 
 open class Quantity(
-    val currentDim: Double,
-    val tempDim: Double,
-    val timeDim: Double,
-    val lengthDim: Double,
-    val massDim: Double,
-    val luminDim: Double,
-    val moleDim: Double,
-    val angleDim: Double,
+    val currentDim: Double = 0.0,
+    val tempDim: Double = 0.0,
+    val timeDim: Double = 0.0,
+    val lengthDim: Double = 0.0,
+    val massDim: Double = 0.0,
+    val luminDim: Double = 0.0,
+    val moleDim: Double = 0.0,
+    val angleDim: Double = 0.0,
     open val value: Double
 ) {
 
     constructor(
-        currentDim: Number,
-        tempDim: Number,
-        timeDim: Number,
-        lengthDim: Number,
-        massDim: Number,
-        luminDim: Number,
-        moleDim: Number,
-        angleDim: Number,
+        currentDim: Number = 0,
+        tempDim: Number = 0,
+        timeDim: Number = 0,
+        lengthDim: Number = 0,
+        massDim: Number = 0,
+        luminDim: Number = 0,
+        moleDim: Number = 0,
+        angleDim: Number = 0,
         value: Number
     ) : this(
         currentDim = currentDim.toDouble(),
