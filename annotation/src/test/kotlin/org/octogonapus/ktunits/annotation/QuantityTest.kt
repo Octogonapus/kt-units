@@ -17,8 +17,13 @@
 package org.octogonapus.ktunits.annotation
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.acosh
@@ -283,5 +288,56 @@ internal class QuantityTest {
     fun `test sign`() {
         val value = 1.3
         assertEquals(sign(value), Quantity(1, 1, 1, 1, value).sign())
+    }
+
+    @ParameterizedTest
+    @MethodSource("cutRangeSource")
+    fun `test cutRange`(value: Double, min: Double, max: Double, expected: Double) {
+        assertEquals(
+            Quantity(1, 1, 1, 1, expected),
+            Quantity(1, 1, 1, 1, value).cutRange(min, max)
+        )
+    }
+
+    @SuppressWarnings("LongParameterList")
+    @ParameterizedTest
+    @MethodSource("mapSource")
+    fun `test map`(
+        value: Double,
+        oldMin: Double,
+        oldMax: Double,
+        newMin: Double,
+        newMax: Double,
+        expectedValue: Double
+    ) {
+        val expected = Quantity(1, 1, 1, 1, expectedValue)
+        val actual = Quantity(1, 1, 1, 1, value).map(oldMin, oldMax, newMin, newMax)
+        assertAll(
+            { assertTrue(expected.dimensionsEqual(actual)) },
+            { assertEquals(expected.value, actual.value, 1e-10) }
+        )
+    }
+
+    companion object {
+
+        @Suppress("unused")
+        @JvmStatic
+        fun cutRangeSource() = listOf(
+            Arguments.of(1, -2, 2, 2),
+            Arguments.of(2, -2, 2, 2),
+            Arguments.of(0, -2, 2, 2),
+            Arguments.of(-2, -2, 2, -2),
+            Arguments.of(-3, -2, 2, -3),
+            Arguments.of(3, -2, 2, 3)
+        )
+
+        @Suppress("unused")
+        @JvmStatic
+        fun mapSource() = listOf(
+            Arguments.of(0, -1, 1, -2, 2, 0),
+            Arguments.of(0.1, -1, 1, -2, 2, 0.2),
+            Arguments.of(-0.1, -1, 1, 2, -2, 0.2),
+            Arguments.of(0, -1, 1, -5, 2, -1.5)
+        )
     }
 }

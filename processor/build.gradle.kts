@@ -23,4 +23,6 @@ dependencies {
     implementation(arrow("arrow-core-extensions"))
     implementation(arrow("arrow-typeclasses"))
     implementation(arrow("arrow-extras-extensions"))
+
+    testImplementation(group = "com.natpryce", name = "hamkrest", version = "1.4.2.2")
 }

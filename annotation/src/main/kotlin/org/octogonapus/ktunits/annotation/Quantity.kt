@@ -14,6 +14,8 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with kt-units.  If not, see <https://www.gnu.org/licenses/>.
  */
+@file:SuppressWarnings("TooManyFunctions")
+
 package org.octogonapus.ktunits.annotation
 
 import kotlin.math.pow
@@ -223,3 +225,26 @@ fun Quantity.abs() = Quantity(massDim, lengthDim, timeDim, angleDim, kotlin.math
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun Quantity.sign() = kotlin.math.sign(value)
+
+fun Quantity.cutRange(min: Double, max: Double): Quantity {
+    val middle = max - (max - min) / 2
+
+    return Quantity(
+        massDim, lengthDim, timeDim, angleDim,
+        if (value > min && value < middle) min
+        else if (value in middle..max) max else value
+    )
+}
+
+fun Quantity.map(
+    oldMin: Double,
+    oldMax: Double,
+    newMin: Double,
+    newMax: Double
+): Quantity = Quantity(
+    massDim,
+    lengthDim,
+    timeDim,
+    angleDim,
+    (value - oldMin) * ((newMax - newMin) / (oldMax - oldMin)) + newMin
+)

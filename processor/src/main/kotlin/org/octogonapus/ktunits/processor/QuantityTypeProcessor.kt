@@ -109,6 +109,8 @@ class QuantityTypeProcessor : AbstractProcessor() {
             allFunctions.add(buildTruncateFun(typeName))
             allFunctions.add(buildRoundFun(typeName))
             allFunctions.add(buildAbsFun(typeName))
+            allFunctions.add(buildCutRangeFun(typeName))
+            allFunctions.add(buildMapFun(typeName))
 
             val conversions = element.getAnnotation(QuantityConversions::class.java)
             val conversionFuns = conversions?.values?.flatMap {
@@ -327,6 +329,45 @@ class QuantityTypeProcessor : AbstractProcessor() {
         .addStatement(
             """
             |return %T(kotlin.math.abs(value))
+            """.trimMargin(),
+            receiverType
+        )
+        .build()
+
+    private fun buildCutRangeFun(
+        receiverType: TypeName
+    ) = FunSpec.builder("cutRange")
+        .addModifiers(KModifier.PUBLIC)
+        .receiver(receiverType)
+        .returns(receiverType)
+        .addParameter("min", Double::class)
+        .addParameter("max", Double::class)
+        .addStatement(
+            """
+            |val middle = max - ((max - min) / 2)
+            |
+            |return %T(
+            |    if (value > min && value < middle) min
+            |    else if (value in middle..max) max else value
+            |)
+            """.trimMargin(),
+            receiverType
+        )
+        .build()
+
+    private fun buildMapFun(
+        receiverType: TypeName
+    ) = FunSpec.builder("map")
+        .addModifiers(KModifier.PUBLIC)
+        .receiver(receiverType)
+        .returns(receiverType)
+        .addParameter("oldMin", Double::class)
+        .addParameter("oldMax", Double::class)
+        .addParameter("newMin", Double::class)
+        .addParameter("newMax", Double::class)
+        .addStatement(
+            """
+            |return %T((value - oldMin) * ((newMax - newMin) / (oldMax - oldMin)) + newMin)
             """.trimMargin(),
             receiverType
         )
