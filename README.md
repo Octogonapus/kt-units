@@ -22,7 +22,7 @@ Non-goals of this project:
 Convert between units of the same dimension:
 ```kotlin
 val meters: Double = 2.inch.meter      // 0.0508 meters
-val pounds: Double = 3.7.newton.lbF    // 0.8317930175247548 pounds (force)
+val pounds: Double = 3.7.newton.lbF    // 0.83 pounds (force)
 ```
 
 Add and subtract units of the same dimension:
@@ -34,7 +34,14 @@ val time: Time = 1.second - 200.millisecond    // 0.8 seconds
 Multiply and divide units of (possibly) differing dimensions:
 ```kotlin
 val velocity: Velocity = 4.foot / 0.5.second    // 8.0 feet per second
-val pressure: Pressure = 2.newton / 10.sqInch   // 309.981401115933 pascal
+val pressure: Pressure = 2.newton / 10.sqInch   // 309.98 pascal
+```
+
+Use familiar math functions:
+```kotlin
+val distance: Length = (1.inch.squared() + 3.inch.squared()).sqrt()  // 3.16 inches
+val sinLength: Double = (PI / 2).meter.sin()  // 1.0
+val volume: Volume = 2.inch.cubed()           // 8 cubic inches
 ```
 
 ## What about units with arbitrary dimensions?
