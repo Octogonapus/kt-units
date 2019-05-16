@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/Octogonapus/kt-units.svg?branch=master)](https://travis-ci.org/Octogonapus/kt-units)
 [![Build status](https://ci.appveyor.com/api/projects/status/ejcuomseklhxej3y?svg=true)](https://ci.appveyor.com/project/Octogonapus/kt-units)
 [![Download](https://api.bintray.com/packages/octogonapus/maven-artifacts/kt-units/images/download.svg) ](https://bintray.com/octogonapus/maven-artifacts/kt-units/_latestVersion)
-[![codecov](https://codecov.io/gh/Octogonapus/kt-units/branch/master/graph/badge.svg)](https://codecov.io/gh/Octogonapus/kt-units)
+[![codecov](https://codecov.io/gh/Octogonapus/kt-units/branch/develop/graph/badge.svg)](https://codecov.io/gh/Octogonapus/kt-units)
 [![stability-experimental](https://img.shields.io/badge/stability-experimental-orange.svg)](https://github.com/emersion/stability-badges#experimental)
 [![License: LGPL-3.0](https://img.shields.io/github/license/Octogonapus/kt-units.svg)](https://img.shields.io/github/license/Octogonapus/kt-units.svg)
 
