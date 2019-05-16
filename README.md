@@ -49,7 +49,7 @@ val volume: Volume = 2.inch.cubed()           // 8 cubic inches
 All units inherit from `Quantity`, so math with units of arbitrary dimensions is possible:
 ```kotlin
 val quantity1 = Quantity(1, 0, -2, 3, 2.0)
-val quantity2= Quantity(2, 3, -4, 0, 6.0)
+val quantity2 = Quantity(2, 3, -4, 0, 6.0)
 val product = quantity1 * quantity2
 // Quantity(massDim=3, lengthDim=3, timeDim=-6, angleDim=3, value=12.0)
 ```
@@ -58,7 +58,7 @@ Some dimensions-sensitive operations, such as addition and subtraction, will thr
 `UnsupportedOperationException` if their requirements are not met:
 ```kotlin
 val quantity1 = Quantity(1, 0, -2, 3, 2.0)
-val quantity2= Quantity(2, 3, -4, 0, 6.0)
+val quantity2 = Quantity(2, 3, -4, 0, 6.0)
 val sum = quantity1 + quantity2
 // java.lang.UnsupportedOperationException: Cannot add quantities with unequal dimensions:
 // Quantity(massDim=1, lengthDim=0, timeDim=-2, angleDim=3, value=2.0)
