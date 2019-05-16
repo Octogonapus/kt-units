@@ -23,8 +23,12 @@ package org.octogonapus.ktunits.annotation
 @Retention(AnnotationRetention.SOURCE)
 @Target(AnnotationTarget.CLASS)
 annotation class QuantityType(
-    val massDim: Double,
-    val lengthDim: Double,
+    val currentDim: Double,
+    val tempDim: Double,
     val timeDim: Double,
+    val lengthDim: Double,
+    val massDim: Double,
+    val luminDim: Double,
+    val moleDim: Double,
     val angleDim: Double
 )

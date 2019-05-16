@@ -19,7 +19,26 @@ package org.octogonapus.ktunits.quantities
 import org.octogonapus.ktunits.annotation.Quantity
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(0.0, 1.0, -2.0, 0.0)
+@QuantityType(
+    currentDim = 0.0,
+    tempDim = 0.0,
+    timeDim = -2.0,
+    lengthDim = 1.0,
+    massDim = 0.0,
+    luminDim = 0.0,
+    moleDim = 0.0,
+    angleDim = 0.0
+)
 data class Acceleration(
     override val value: Double
-) : Quantity(0, 1, -2, 0, value)
+) : Quantity(
+    currentDim = 0.0,
+    tempDim = 0.0,
+    timeDim = -2,
+    lengthDim = 1,
+    massDim = 0,
+    luminDim = 0.0,
+    moleDim = 0.0,
+    angleDim = 0,
+    value = value
+)

@@ -21,7 +21,16 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(0.0, 3.0, 0.0, 0.0)
+@QuantityType(
+    currentDim = 0.0,
+    tempDim = 0.0,
+    timeDim = 0.0,
+    lengthDim = 3.0,
+    massDim = 0.0,
+    luminDim = 0.0,
+    moleDim = 0.0,
+    angleDim = 0.0
+)
 @QuantityConversions(
     QuantityConversion("cubicMeter", 1.0),
     QuantityConversion("cubicCentimeter", 1e-6),
@@ -35,4 +44,14 @@ import org.octogonapus.ktunits.annotation.QuantityType
 )
 data class Volume(
     override val value: Double
-) : Quantity(0, 3, 0, 0, value)
+) : Quantity(
+    currentDim = 0.0,
+    tempDim = 0.0,
+    timeDim = 0,
+    lengthDim = 3,
+    massDim = 0,
+    luminDim = 0.0,
+    moleDim = 0.0,
+    angleDim = 0,
+    value = value
+)

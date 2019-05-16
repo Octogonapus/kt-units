@@ -51,139 +51,162 @@ import kotlin.math.sqrt
 import kotlin.math.tan
 import kotlin.math.tanh
 import kotlin.math.truncate
+import kotlin.random.Random
 
 internal class QuantityTest {
+
+    private fun quantityWithDims(dim: Number, value: Number) = quantityWithDims({ dim }, value)
+
+    private fun quantityWithDims(dimGenerator: (Int) -> Number, value: Number) = Quantity(
+        currentDim = dimGenerator(1),
+        tempDim = dimGenerator(2),
+        timeDim = dimGenerator(3),
+        lengthDim = dimGenerator(4),
+        massDim = dimGenerator(5),
+        luminDim = dimGenerator(6),
+        moleDim = dimGenerator(7),
+        angleDim = dimGenerator(8),
+        value = value
+    )
+
+    private fun quantityWithRandomDims(value: Number = 0) = Random.Default.quantityWithRandomDims(value)
+
+    private fun Random.quantityWithRandomDims(value: Number = 0) = Quantity(
+        currentDim = nextDouble(),
+        tempDim = nextDouble(),
+        timeDim = nextDouble(),
+        lengthDim = nextDouble(),
+        massDim = nextDouble(),
+        luminDim = nextDouble(),
+        moleDim = nextDouble(),
+        angleDim = nextDouble(),
+        value = value.toDouble()
+    )
 
     @Test
     fun `test plus`() {
         assertEquals(
-            Quantity(1, 1, 1, 1, 3.0),
-            Quantity(1, 1, 1, 1, 1.0) +
-                Quantity(1, 1, 1, 1, 2.0)
+            quantityWithDims(1, 3),
+            quantityWithDims(1, 1) + quantityWithDims(1, 2)
         )
     }
 
     @Test
     fun `test plus throws`() {
         assertThrows<UnsupportedOperationException> {
-            Quantity(1, 1, 2, 1, 1.0) +
-                Quantity(1, 1, 1, 1, 2.0)
+            quantityWithRandomDims(1) + quantityWithRandomDims(2)
         }
     }
 
     @Test
     fun `test minus`() {
         assertEquals(
-            Quantity(1, 1, 1, 1, 2.0),
-            Quantity(1, 1, 1, 1, 3.0) -
-                Quantity(1, 1, 1, 1, 1.0)
+            quantityWithDims(1, 2),
+            quantityWithDims(1, 3) - quantityWithDims(1, 1)
         )
     }
 
     @Test
     fun `test minus throws`() {
         assertThrows<UnsupportedOperationException> {
-            Quantity(1, 1, 1, 1, 3.0) -
-                Quantity(1, 3, 1, 1, 1.0)
+            quantityWithRandomDims(3) - quantityWithRandomDims(1)
         }
     }
 
     @Test
     fun `test multiply`() {
         assertEquals(
-            Quantity(2, 4, 6, 8, 25.0),
-            Quantity(1, 2, 3, 4, 5.0) *
-                Quantity(1, 2, 3, 4, 5.0)
+            quantityWithDims({ it * 2 }, 25),
+            quantityWithDims({ it }, 5) * quantityWithDims({ it }, 5)
         )
     }
 
     @Test
     fun `test divide`() {
         assertEquals(
-            Quantity(0, 0, 1, 2, 3.0 / 2.0),
-            Quantity(1, 2, 3, 4, 3.0) /
-                Quantity(1, 2, 2, 2, 2.0)
+            quantityWithDims({ it }, 3.0 / 2.0),
+            quantityWithDims({ it * 3 }, 3) / quantityWithDims({ it * 2 }, 2)
         )
     }
 
     @Test
     fun `test sin`() {
         val value = 1.3
-        assertEquals(sin(value), Quantity(0, 0, 0, 0, value).sin())
+        assertEquals(sin(value), quantityWithDims(0, value).sin())
     }
 
     @Test
     fun `test cos`() {
         val value = 1.3
-        assertEquals(cos(value), Quantity(0, 0, 0, 0, value).cos())
+        assertEquals(cos(value), quantityWithDims(0, value).cos())
     }
 
     @Test
     fun `test tan`() {
         val value = 1.3
-        assertEquals(tan(value), Quantity(0, 0, 0, 0, value).tan())
+        assertEquals(tan(value), quantityWithDims(0, value).tan())
     }
 
     @Test
     fun `test asin`() {
         val value = 1.3
-        assertEquals(asin(value), Quantity(0, 0, 0, 0, value).asin())
+        assertEquals(asin(value), quantityWithDims(0, value).asin())
     }
 
     @Test
     fun `test acos`() {
         val value = 1.3
-        assertEquals(acos(value), Quantity(0, 0, 0, 0, value).acos())
+        assertEquals(acos(value), quantityWithDims(0, value).acos())
     }
 
     @Test
     fun `test atan`() {
         val value = 1.3
-        assertEquals(atan(value), Quantity(0, 0, 0, 0, value).atan())
+        assertEquals(atan(value), quantityWithDims(0, value).atan())
     }
 
     @Test
     fun `test sinh`() {
         val value = 1.3
-        assertEquals(sinh(value), Quantity(0, 0, 0, 0, value).sinh())
+        assertEquals(sinh(value), quantityWithDims(0, value).sinh())
     }
 
     @Test
     fun `test cosh`() {
         val value = 1.3
-        assertEquals(cosh(value), Quantity(0, 0, 0, 0, value).cosh())
+        assertEquals(cosh(value), quantityWithDims(0, value).cosh())
     }
 
     @Test
     fun `test tanhh`() {
         val value = 1.3
-        assertEquals(tanh(value), Quantity(0, 0, 0, 0, value).tanh())
+        assertEquals(tanh(value), quantityWithDims(0, value).tanh())
     }
 
     @Test
     fun `test asinh`() {
         val value = 1.3
-        assertEquals(asinh(value), Quantity(0, 0, 0, 0, value).asinh())
+        assertEquals(asinh(value), quantityWithDims(0, value).asinh())
     }
 
     @Test
     fun `test acosh`() {
         val value = 1.3
-        assertEquals(acosh(value), Quantity(0, 0, 0, 0, value).acosh())
+        assertEquals(acosh(value), quantityWithDims(0, value).acosh())
     }
 
     @Test
     fun `test aatanhh`() {
         val value = 1.3
-        assertEquals(atanh(value), Quantity(0, 0, 0, 0, value).atanh())
+        assertEquals(atanh(value), quantityWithDims(0, value).atanh())
     }
 
     @Test
     fun `test sqrt`() {
         val value = 1.3
         assertEquals(
-            Quantity(1, 2, 3, 4, sqrt(value)),
-            Quantity(2, 4, 6, 8, value).sqrt()
+            quantityWithDims({ it }, sqrt(value)),
+            quantityWithDims({ it * 2 }, value).sqrt()
         )
     }
 
@@ -191,60 +214,60 @@ internal class QuantityTest {
     fun `test pow`() {
         val value = 1.3
         assertEquals(
-            Quantity(4, 8, 12, 16, value.pow(2)),
-            Quantity(2, 4, 6, 8, value).pow(2)
+            quantityWithDims({ it * 4 }, value.pow(2)),
+            quantityWithDims({ it * 2 }, value).pow(2)
         )
     }
 
     @Test
     fun `test exp`() {
         val value = 1.3
-        assertEquals(exp(value), Quantity(0, 0, 0, 0, value).exp())
+        assertEquals(exp(value), quantityWithDims(0, value).exp())
     }
 
     @Test
     fun `test expm1`() {
         val value = 1.3
-        assertEquals(expm1(value), Quantity(0, 0, 0, 0, value).expm1())
+        assertEquals(expm1(value), quantityWithDims(0, value).expm1())
     }
 
     @Test
     fun `test log`() {
         val value = 1.3
         val base = 3.0
-        assertEquals(log(value, base), Quantity(0, 0, 0, 0, value).log(base))
+        assertEquals(log(value, base), quantityWithDims(0, value).log(base))
     }
 
     @Test
     fun `test ln`() {
         val value = 1.3
-        assertEquals(ln(value), Quantity(0, 0, 0, 0, value).ln())
+        assertEquals(ln(value), quantityWithDims(0, value).ln())
     }
 
     @Test
     fun `test log10`() {
         val value = 1.3
-        assertEquals(log10(value), Quantity(0, 0, 0, 0, value).log10())
+        assertEquals(log10(value), quantityWithDims(0, value).log10())
     }
 
     @Test
     fun `test log2`() {
         val value = 1.3
-        assertEquals(log2(value), Quantity(0, 0, 0, 0, value).log2())
+        assertEquals(log2(value), quantityWithDims(0, value).log2())
     }
 
     @Test
     fun `test ln1p`() {
         val value = 1.3
-        assertEquals(ln1p(value), Quantity(0, 0, 0, 0, value).ln1p())
+        assertEquals(ln1p(value), quantityWithDims(0, value).ln1p())
     }
 
     @Test
     fun `test ceil`() {
         val value = 1.3
         assertEquals(
-            Quantity(1, 1, 1, 1, ceil(value)),
-            Quantity(1, 1, 1, 1, value).ceil()
+            quantityWithDims(1, ceil(value)),
+            quantityWithDims(1, value).ceil()
         )
     }
 
@@ -252,8 +275,8 @@ internal class QuantityTest {
     fun `test floor`() {
         val value = 1.3
         assertEquals(
-            Quantity(1, 1, 1, 1, floor(value)),
-            Quantity(1, 1, 1, 1, value).floor()
+            quantityWithDims(1, floor(value)),
+            quantityWithDims(1, value).floor()
         )
     }
 
@@ -261,8 +284,8 @@ internal class QuantityTest {
     fun `test truncate`() {
         val value = 1.3
         assertEquals(
-            Quantity(1, 1, 1, 1, truncate(value)),
-            Quantity(1, 1, 1, 1, value).truncate()
+            quantityWithDims(1, truncate(value)),
+            quantityWithDims(1, value).truncate()
         )
     }
 
@@ -270,8 +293,8 @@ internal class QuantityTest {
     fun `test round`() {
         val value = 1.3
         assertEquals(
-            Quantity(1, 1, 1, 1, round(value)),
-            Quantity(1, 1, 1, 1, value).round()
+            quantityWithDims(1, round(value)),
+            quantityWithDims(1, value).round()
         )
     }
 
@@ -279,23 +302,23 @@ internal class QuantityTest {
     fun `test abs`() {
         val value = 1.3
         assertEquals(
-            Quantity(1, 1, 1, 1, abs(value)),
-            Quantity(1, 1, 1, 1, value).abs()
+            quantityWithDims(1, abs(value)),
+            quantityWithDims(1, value).abs()
         )
     }
 
     @Test
     fun `test sign`() {
         val value = 1.3
-        assertEquals(sign(value), Quantity(1, 1, 1, 1, value).sign())
+        assertEquals(sign(value), quantityWithDims(0, value).sign())
     }
 
     @ParameterizedTest
     @MethodSource("cutRangeSource")
     fun `test cutRange`(value: Double, min: Double, max: Double, expected: Double) {
         assertEquals(
-            Quantity(1, 1, 1, 1, expected),
-            Quantity(1, 1, 1, 1, value).cutRange(min, max)
+            quantityWithDims(0, expected),
+            quantityWithDims(0, value).cutRange(min, max)
         )
     }
 
@@ -310,8 +333,8 @@ internal class QuantityTest {
         newMax: Double,
         expectedValue: Double
     ) {
-        val expected = Quantity(1, 1, 1, 1, expectedValue)
-        val actual = Quantity(1, 1, 1, 1, value).map(oldMin, oldMax, newMin, newMax)
+        val expected = quantityWithDims(0, expectedValue)
+        val actual = quantityWithDims(0, value).map(oldMin, oldMax, newMin, newMax)
         assertAll(
             { assertTrue(expected.dimensionsEqual(actual)) },
             { assertEquals(expected.value, actual.value, 1e-10) }

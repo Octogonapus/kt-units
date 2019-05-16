@@ -20,51 +20,75 @@ import org.octogonapus.ktunits.annotation.QuantityType
 import javax.lang.model.element.Element
 
 internal data class DimensionData(
-    val massDim: Double,
-    val lengthDim: Double,
-    val timeDim: Double,
-    val angleDim: Double
+    private val currentDim: Double,
+    private val tempDim: Double,
+    private val timeDim: Double,
+    private val lengthDim: Double,
+    private val massDim: Double,
+    private val luminDim: Double,
+    private val moleDim: Double,
+    private val angleDim: Double
 ) {
 
     operator fun plus(other: DimensionData) =
         DimensionData(
-            massDim + other.massDim,
-            lengthDim + other.lengthDim,
-            timeDim + other.timeDim,
-            angleDim + other.angleDim
+            currentDim = currentDim + other.currentDim,
+            tempDim = tempDim + other.tempDim,
+            timeDim = timeDim + other.timeDim,
+            lengthDim = lengthDim + other.lengthDim,
+            massDim = massDim + other.massDim,
+            luminDim = luminDim + other.luminDim,
+            moleDim = moleDim + other.moleDim,
+            angleDim = angleDim + other.angleDim
         )
 
     operator fun minus(other: DimensionData) =
         DimensionData(
-            massDim - other.massDim,
-            lengthDim - other.lengthDim,
-            timeDim - other.timeDim,
-            angleDim - other.angleDim
+            currentDim = currentDim - other.currentDim,
+            tempDim = tempDim - other.tempDim,
+            timeDim = timeDim - other.timeDim,
+            lengthDim = lengthDim - other.lengthDim,
+            massDim = massDim - other.massDim,
+            luminDim = luminDim - other.luminDim,
+            moleDim = moleDim - other.moleDim,
+            angleDim = angleDim - other.angleDim
         )
 
     operator fun times(factor: Double) =
         DimensionData(
-            massDim * factor,
-            lengthDim * factor,
-            timeDim * factor,
-            angleDim * factor
+            currentDim = currentDim * factor,
+            tempDim = tempDim * factor,
+            timeDim = timeDim * factor,
+            lengthDim = lengthDim * factor,
+            massDim = massDim * factor,
+            luminDim = luminDim * factor,
+            moleDim = moleDim * factor,
+            angleDim = angleDim * factor
         )
 
     operator fun div(denom: Double) =
         DimensionData(
-            massDim / denom,
-            lengthDim / denom,
-            timeDim / denom,
-            angleDim / denom
+            currentDim = currentDim / denom,
+            tempDim = tempDim / denom,
+            timeDim = timeDim / denom,
+            lengthDim = lengthDim / denom,
+            massDim = massDim / denom,
+            luminDim = luminDim / denom,
+            moleDim = moleDim / denom,
+            angleDim = angleDim / denom
         )
 }
 
 internal fun Element.getDimensionData() =
     getAnnotation(QuantityType::class.java).let {
         DimensionData(
-            it.massDim,
-            it.lengthDim,
-            it.timeDim,
-            it.angleDim
+            currentDim = it.currentDim,
+            tempDim = it.tempDim,
+            timeDim = it.timeDim,
+            lengthDim = it.lengthDim,
+            massDim = it.massDim,
+            luminDim = it.luminDim,
+            moleDim = it.moleDim,
+            angleDim = it.angleDim
         )
     }

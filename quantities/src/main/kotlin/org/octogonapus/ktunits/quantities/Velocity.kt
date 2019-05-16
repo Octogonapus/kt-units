@@ -21,7 +21,16 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(0.0, 1.0, -1.0, 0.0)
+@QuantityType(
+    currentDim = 0.0,
+    tempDim = 0.0,
+    timeDim = -1.0,
+    lengthDim = 1.0,
+    massDim = 0.0,
+    luminDim = 0.0,
+    moleDim = 0.0,
+    angleDim = 0.0
+)
 @QuantityConversions(
     QuantityConversion("mps", 1.0),
     QuantityConversion("cmps", 1e-2),
@@ -32,4 +41,14 @@ import org.octogonapus.ktunits.annotation.QuantityType
 )
 data class Velocity(
     override val value: Double
-) : Quantity(0, 1, -1, 0, value)
+) : Quantity(
+    currentDim = 0.0,
+    tempDim = 0.0,
+    timeDim = -1,
+    lengthDim = 1,
+    massDim = 0,
+    luminDim = 0.0,
+    moleDim = 0.0,
+    angleDim = 0,
+    value = value
+)
