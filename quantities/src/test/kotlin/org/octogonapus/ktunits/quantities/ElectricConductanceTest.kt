@@ -38,7 +38,7 @@ internal class ElectricConductanceTest {
     @Test
     fun `from test success`() {
         assertEquals(
-            1.ohm,
+            1.siemens,
             ElectricConductance.from(
                 (1.second.pow(3) * 1.ampere.pow(2) / (1.kilogram * 1.meter.pow(2)))
             )

@@ -35,7 +35,7 @@ internal class ChargeTest {
     @Test
     fun `from test success`() {
         assertEquals(
-            1.ohm,
+            1.coulomb,
             Charge.from(
                 (1.second * 1.ampere)
             )

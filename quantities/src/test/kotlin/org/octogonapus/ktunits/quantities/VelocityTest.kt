@@ -35,7 +35,7 @@ internal class VelocityTest {
     @Test
     fun `from test success`() {
         assertEquals(
-            1.meter,
+            1.mps,
             Velocity.from(1.meter / 1.second)
         )
     }

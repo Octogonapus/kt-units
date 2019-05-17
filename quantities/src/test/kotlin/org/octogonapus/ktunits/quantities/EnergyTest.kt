@@ -23,7 +23,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.octogonapus.ktunits.annotation.Quantity
-import org.octogonapus.ktunits.annotation.pow
 
 internal class EnergyTest {
 
@@ -37,7 +36,7 @@ internal class EnergyTest {
     fun `from test success`() {
         assertEquals(
             1.joule,
-            Energy.from(1.kilogram * 1.mps.pow(2))
+            Energy.from(1.watt * 1.second)
         )
     }
 

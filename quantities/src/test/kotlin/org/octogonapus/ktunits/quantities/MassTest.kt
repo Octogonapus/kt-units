@@ -23,7 +23,6 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.octogonapus.ktunits.annotation.Quantity
-import org.octogonapus.ktunits.annotation.pow
 
 internal class MassTest {
 
@@ -37,7 +36,7 @@ internal class MassTest {
     fun `from test success`() {
         assertEquals(
             1.kilogram,
-            Mass.from(1.newton / 1.meter.pow(2) * 1.second.pow(2))
+            Mass.from(1.newton / (1.mps / 1.second))
         )
     }
 
