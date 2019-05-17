@@ -90,5 +90,5 @@ data class Pressure(
 Then, optionally, for each desired conversion property (e.g., `1.pascal`, `myPressure.bar`, etc.)
 a `QuantityConversion` is defined specifying the name of the conversion and the ratio of
 "unconverted" units to SI units (e.g., `1 bar` is equivalent to `1e+5 pascal`). `QuantityBlacklist`
-resolves conflicting declarations with `Energy` because `Torque` and `Energy` have the same
+resolves conflicting declarations with `Torque` because `Torque` and `Energy` have the same
 dimensions.
