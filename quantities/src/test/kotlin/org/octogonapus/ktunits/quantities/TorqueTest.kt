@@ -17,6 +17,8 @@
 package org.octogonapus.ktunits.quantities
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -28,6 +30,21 @@ internal class TorqueTest {
     @MethodSource("torqueUnitsSource")
     fun `torque units tests`(expected: Quantity, actual: Quantity) {
         assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `from test success`() {
+        assertEquals(
+            1.nM,
+            Torque.from(1.newton * 1.meter)
+        )
+    }
+
+    @Test
+    fun `from test failure`() {
+        assertThrows<IllegalArgumentException> {
+            Torque.from(1.volt)
+        }
     }
 
     companion object {

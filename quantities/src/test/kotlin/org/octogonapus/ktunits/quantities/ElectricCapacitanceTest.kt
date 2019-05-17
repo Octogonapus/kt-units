@@ -17,10 +17,15 @@
 package org.octogonapus.ktunits.quantities
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.div
+import org.octogonapus.ktunits.annotation.pow
+import org.octogonapus.ktunits.annotation.times
 
 internal class ElectricCapacitanceTest {
 
@@ -28,7 +33,23 @@ internal class ElectricCapacitanceTest {
     @MethodSource("electricCapacitanceUnitsSource")
     fun `electric capacitance units tests`(expected: Quantity, actual: Quantity) {
         assertEquals(expected, actual)
-        val test: MagneticFlux = 1.joule / 1.ampere
+    }
+
+    @Test
+    fun `from test success`() {
+        assertEquals(
+            1.farad,
+            ElectricCapacitance.from(
+                (1.ampere.pow(2) * 1.second.pow(4) / 1.meter.pow(2) / 1.kilogram)
+            )
+        )
+    }
+
+    @Test
+    fun `from test failure`() {
+        assertThrows<IllegalArgumentException> {
+            ElectricCapacitance.from(1.volt)
+        }
     }
 
     companion object {

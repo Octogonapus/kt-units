@@ -31,4 +31,25 @@ import org.octogonapus.ktunits.annotation.QuantityType
 )
 data class ElectricCapacitance(
     override val value: Double
-) : Quantity(lengthDim = -2.0, massDim = -1.0, timeDim = 4.0, currentDim = 2.0, value = value)
+) : Quantity(lengthDim = -2.0, massDim = -1.0, timeDim = 4.0, currentDim = 2.0, value = value) {
+    companion object {
+        fun from(other: Quantity): ElectricCapacitance {
+            if (other.dimensionsEqual(
+                    lengthDim = -2.0,
+                    massDim = -1.0,
+                    timeDim = 4.0,
+                    currentDim = 2.0
+                )
+            ) {
+                return ElectricCapacitance(other.value)
+            } else {
+                throw IllegalArgumentException(
+                    """
+                    |Cannot convert quantity to ElectricCapacitance:
+                    |$other
+                    """.trimMargin()
+                )
+            }
+        }
+    }
+}

@@ -39,4 +39,22 @@ import org.octogonapus.ktunits.annotation.QuantityType
 )
 data class Mass(
     override val value: Double
-) : Quantity(massDim = 1.0, value = value)
+) : Quantity(massDim = 1.0, value = value) {
+    companion object {
+        fun from(other: Quantity): Mass {
+            if (other.dimensionsEqual(
+                    massDim = 1.0
+                )
+            ) {
+                return Mass(other.value)
+            } else {
+                throw IllegalArgumentException(
+                    """
+                    |Cannot convert quantity to Mass:
+                    |$other
+                    """.trimMargin()
+                )
+            }
+        }
+    }
+}

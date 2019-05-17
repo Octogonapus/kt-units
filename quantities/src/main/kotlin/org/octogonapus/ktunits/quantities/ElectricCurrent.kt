@@ -29,4 +29,22 @@ import org.octogonapus.ktunits.annotation.QuantityType
 @QuantityBlacklist(Torque::class)
 data class ElectricCurrent(
     override val value: Double
-) : Quantity(currentDim = 1.0, value = value)
+) : Quantity(currentDim = 1.0, value = value) {
+    companion object {
+        fun from(other: Quantity): ElectricCurrent {
+            if (other.dimensionsEqual(
+                    currentDim = 1.0
+                )
+            ) {
+                return ElectricCurrent(other.value)
+            } else {
+                throw IllegalArgumentException(
+                    """
+                    |Cannot convert quantity to ElectricCurrent:
+                    |$other
+                    """.trimMargin()
+                )
+            }
+        }
+    }
+}
