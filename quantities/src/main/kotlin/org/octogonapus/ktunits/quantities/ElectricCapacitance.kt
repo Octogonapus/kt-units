@@ -17,16 +17,18 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
-import org.octogonapus.ktunits.annotation.QuantityBlacklist
 import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0)
+@QuantityType(lengthDim = -2.0, massDim = -1.0, timeDim = 4.0, currentDim = 2.0)
 @QuantityConversions(
-    QuantityConversion("volt", 1.0)
+    QuantityConversion("picofarad", 1e-12),
+    QuantityConversion("nanofarad", 1e-9),
+    QuantityConversion("microfarad", 1e-6),
+    QuantityConversion("millifarad", 1e-3),
+    QuantityConversion("farad", 1.0)
 )
-@QuantityBlacklist(Torque::class)
-data class ElectricPotential(
+data class ElectricCapacitance(
     override val value: Double
-) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0, value = value)
+) : Quantity(lengthDim = -2.0, massDim = -1.0, timeDim = 4.0, currentDim = 2.0, value = value)

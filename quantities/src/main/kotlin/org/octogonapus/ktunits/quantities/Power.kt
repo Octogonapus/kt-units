@@ -22,11 +22,24 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0)
+@QuantityType(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0)
 @QuantityConversions(
-    QuantityConversion("volt", 1.0)
+    QuantityConversion("picowatt", 1e-12),
+    QuantityConversion("nanowatt", 1e-9),
+    QuantityConversion("microwatt", 1e-6),
+    QuantityConversion("milliwatt", 1e-3),
+    QuantityConversion("centiwatt", 1e-2),
+    QuantityConversion("deciwatt", 1e-1),
+    QuantityConversion("watt", 1.0),
+    QuantityConversion("decawatt", 1e+1),
+    QuantityConversion("hectowatt", 1e+2),
+    QuantityConversion("kilowatt", 1e+3),
+    QuantityConversion("megawatt", 1e+6),
+    QuantityConversion("gigawatt", 1e+9),
+    QuantityConversion("terawatt", 1e+12),
+    QuantityConversion("petawatt", 1e+15)
 )
 @QuantityBlacklist(Torque::class)
-data class ElectricPotential(
+data class Power(
     override val value: Double
-) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0, value = value)
+) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, value = value)

@@ -17,6 +17,7 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityBlacklist
 import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
@@ -25,6 +26,7 @@ import org.octogonapus.ktunits.annotation.QuantityType
 @QuantityConversions(
     QuantityConversion("ampere", 1.0)
 )
+@QuantityBlacklist(Torque::class)
 data class ElectricCurrent(
     override val value: Double
 ) : Quantity(currentDim = 1.0, value = value)

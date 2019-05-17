@@ -14,19 +14,12 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with kt-units.  If not, see <https://www.gnu.org/licenses/>.
  */
-package org.octogonapus.ktunits.quantities
+package org.octogonapus.ktunits.annotation
 
-import org.octogonapus.ktunits.annotation.Quantity
-import org.octogonapus.ktunits.annotation.QuantityBlacklist
-import org.octogonapus.ktunits.annotation.QuantityConversion
-import org.octogonapus.ktunits.annotation.QuantityConversions
-import org.octogonapus.ktunits.annotation.QuantityType
+import kotlin.reflect.KClass
 
-@QuantityType(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0)
-@QuantityConversions(
-    QuantityConversion("volt", 1.0)
+@Retention(AnnotationRetention.SOURCE)
+@Target(AnnotationTarget.CLASS)
+annotation class QuantityBlacklist(
+    vararg val blacklistedClasses: KClass<out Quantity>
 )
-@QuantityBlacklist(Torque::class)
-data class ElectricPotential(
-    override val value: Double
-) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0, value = value)

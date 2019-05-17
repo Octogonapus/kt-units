@@ -17,6 +17,7 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityBlacklist
 import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
@@ -35,6 +36,7 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("microsecond", 1e-6),
     QuantityConversion("nanosecond", 1e-9)
 )
+@QuantityBlacklist(Torque::class)
 data class Time(
     override val value: Double
 ) : Quantity(timeDim = 1.0, value = value)

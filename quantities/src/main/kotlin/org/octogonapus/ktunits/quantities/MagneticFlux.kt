@@ -22,11 +22,14 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0)
+@QuantityType(lengthDim = 2.0, massDim = 1.0, timeDim = -2.0, currentDim = -1.0)
 @QuantityConversions(
-    QuantityConversion("volt", 1.0)
+    QuantityConversion("nanoweber", 1e-9),
+    QuantityConversion("microweber", 1e-6),
+    QuantityConversion("milliweber", 1e-3),
+    QuantityConversion("weber", 1.0)
 )
 @QuantityBlacklist(Torque::class)
-data class ElectricPotential(
+data class MagneticFlux(
     override val value: Double
-) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0, value = value)
+) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -2.0, currentDim = -1.0, value = value)

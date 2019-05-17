@@ -17,16 +17,22 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
-import org.octogonapus.ktunits.annotation.QuantityBlacklist
 import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0)
+@QuantityType(lengthDim = 2.0, massDim = 1.0, timeDim = -2.0)
 @QuantityConversions(
-    QuantityConversion("volt", 1.0)
+    QuantityConversion("picojoule", 1e-12),
+    QuantityConversion("nanojoule", 1e-9),
+    QuantityConversion("microjoule", 1e-6),
+    QuantityConversion("millijoule", 1e-3),
+    QuantityConversion("joule", 1.0),
+    QuantityConversion("kilojoule", 1e+3),
+    QuantityConversion("megajoule", 1e+6),
+    QuantityConversion("gigajoule", 1e+9),
+    QuantityConversion("terajoule", 1e+12)
 )
-@QuantityBlacklist(Torque::class)
-data class ElectricPotential(
+data class Energy(
     override val value: Double
-) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0, value = value)
+) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -2.0, value = value)

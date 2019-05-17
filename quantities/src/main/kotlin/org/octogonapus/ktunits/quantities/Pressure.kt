@@ -17,6 +17,7 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityBlacklist
 import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
@@ -27,6 +28,7 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("bar", 1e+5),
     QuantityConversion("lbFin", 6894.757293168)
 )
+@QuantityBlacklist(Torque::class)
 data class Pressure(
     override val value: Double
 ) : Quantity(timeDim = -2.0, lengthDim = -1.0, massDim = 1.0, value = value)

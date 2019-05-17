@@ -22,11 +22,15 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0)
+@QuantityType(timeDim = 1.0, currentDim = 1.0)
 @QuantityConversions(
-    QuantityConversion("volt", 1.0)
+    QuantityConversion("picocoulomb", 1e-12),
+    QuantityConversion("nanocoulomb", 1e-9),
+    QuantityConversion("microcoulomb", 1e-6),
+    QuantityConversion("millicoulomb", 1e-3),
+    QuantityConversion("coulomb", 1.0)
 )
 @QuantityBlacklist(Torque::class)
-data class ElectricPotential(
+data class Charge(
     override val value: Double
-) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0, value = value)
+) : Quantity(timeDim = 1.0, currentDim = 1.0, value = value)

@@ -27,6 +27,7 @@ import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.asTypeName
+import org.octogonapus.ktunits.annotation.QuantityBlacklist
 import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
@@ -37,9 +38,12 @@ import javax.annotation.processing.RoundEnvironment
 import javax.annotation.processing.SupportedOptions
 import javax.annotation.processing.SupportedSourceVersion
 import javax.lang.model.SourceVersion
+import javax.lang.model.element.AnnotationMirror
+import javax.lang.model.element.AnnotationValue
 import javax.lang.model.element.Element
 import javax.lang.model.element.ElementKind
 import javax.lang.model.element.TypeElement
+import javax.lang.model.type.TypeMirror
 import javax.tools.Diagnostic
 
 /**
@@ -56,6 +60,9 @@ class QuantityTypeProcessor : AbstractProcessor() {
         annotations: MutableSet<out TypeElement>,
         roundEnv: RoundEnvironment
     ): Boolean {
+        fun TypeMirror.asTypeElement(): TypeElement =
+            processingEnv.typeUtils.asElement(this) as TypeElement
+
         val annotatedTypeClasses = roundEnv.getElementsAnnotatedWith(QuantityType::class.java)
         if (annotatedTypeClasses.isEmpty()) return false
         validateAnnotatedClasses(annotatedTypeClasses)
@@ -70,6 +77,13 @@ class QuantityTypeProcessor : AbstractProcessor() {
         val allFunctions = mutableListOf<FunSpec>()
         val allProperties = mutableListOf<PropertySpec>()
 
+        val blacklists = validateAnnotatedClasses(
+            roundEnv.getElementsAnnotatedWith(QuantityBlacklist::class.java)
+        ).map {
+            val blacklistedClasses = getBlacklistedClasses(it.asType().asTypeElement())
+            it.asType().asTypeName() to blacklistedClasses
+        }.toMap()
+
         val cartesianProduct = ListK.applicative()
             .tupled(annotatedClassesToDimensions.k(), annotatedClassesToDimensions.k())
             .fix()
@@ -78,11 +92,14 @@ class QuantityTypeProcessor : AbstractProcessor() {
             // Emitting multiple functions here will cause conflicting declarations, but it helps
             // the user know the root cause
             annotatedClassesToDimensions.forEach { returnType ->
-                if (it.a.isMultiplyCompatible(it.b, returnType)) {
+                val blacklisted = blacklists[it.a.typeName]?.contains(returnType.element.asType())
+                    ?: false
+
+                if (!blacklisted && it.a.isMultiplyCompatible(it.b, returnType)) {
                     allFunctions.add(buildMultiplyFun(it.a, it.b, returnType))
                 }
 
-                if (it.a.isDivideCompatible(it.b, returnType)) {
+                if (!blacklisted && it.a.isDivideCompatible(it.b, returnType)) {
                     allFunctions.add(buildDivideFun(it.a, it.b, returnType))
                 }
             }
@@ -136,7 +153,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
         return false
     }
 
-    private fun validateAnnotatedClasses(classes: Set<Element>) {
+    private fun validateAnnotatedClasses(classes: Set<Element>): Set<Element> {
         classes.forEach { element ->
             if (element.kind != ElementKind.CLASS) {
                 "Can only be applied to classes, element: $element".let {
@@ -154,6 +171,8 @@ class QuantityTypeProcessor : AbstractProcessor() {
                 }
             }
         }
+
+        return classes
     }
 
     private fun buildMultiplyFun(
@@ -405,6 +424,40 @@ class QuantityTypeProcessor : AbstractProcessor() {
             )
             .build()
     )
+
+    private fun getAnnotationMirror(typeElement: TypeElement, clazz: Class<*>): AnnotationMirror? {
+        val clazzName = clazz.name
+        for (m in typeElement.annotationMirrors) {
+            if (m.annotationType.toString() == clazzName) {
+                return m
+            }
+        }
+
+        return null
+    }
+
+    private fun getAnnotationValue(
+        annotationMirror: AnnotationMirror,
+        @Suppress("SameParameterValue") key: String
+    ): AnnotationValue? {
+        for ((key1, value) in annotationMirror.elementValues) {
+            if (key1.simpleName.toString() == key) {
+                return value
+            }
+        }
+
+        return null
+    }
+
+    private fun getBlacklistedClasses(foo: TypeElement): List<TypeMirror> {
+        val am = getAnnotationMirror(foo, QuantityBlacklist::class.java)!!
+        val av = getAnnotationValue(am, "blacklistedClasses")
+
+        @Suppress("UNCHECKED_CAST")
+        val values = av?.value as List<AnnotationValue>
+
+        return values.map { it.value as TypeMirror }
+    }
 
     private fun printError(message: String) =
         processingEnv.messager.printMessage(Diagnostic.Kind.ERROR, message)

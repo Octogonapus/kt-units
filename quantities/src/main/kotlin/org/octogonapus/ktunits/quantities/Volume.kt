@@ -17,6 +17,7 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityBlacklist
 import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
@@ -33,6 +34,7 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("pint", 4.732 * 1e-4),
     QuantityConversion("gallon", 3.785 * 1e-3)
 )
+@QuantityBlacklist(Torque::class)
 data class Volume(
     override val value: Double
 ) : Quantity(lengthDim = 3.0, value = value)

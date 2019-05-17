@@ -17,6 +17,7 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityBlacklist
 import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
@@ -29,6 +30,7 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("lbF", 4.448222),
     QuantityConversion("pdl", 0.138255)
 )
+@QuantityBlacklist(Energy::class)
 data class Force(
     override val value: Double
 ) : Quantity(timeDim = -2.0, lengthDim = 1.0, massDim = 1.0, value = value)

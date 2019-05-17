@@ -17,16 +17,14 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
-import org.octogonapus.ktunits.annotation.QuantityBlacklist
 import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0)
+@QuantityType(lengthDim = -2.0, massDim = -1.0, timeDim = 3.0, currentDim = 2.0)
 @QuantityConversions(
-    QuantityConversion("volt", 1.0)
+    QuantityConversion("siemens", 1.0)
 )
-@QuantityBlacklist(Torque::class)
-data class ElectricPotential(
+data class ElectricConductance(
     override val value: Double
-) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0, value = value)
+) : Quantity(lengthDim = -2.0, massDim = -1.0, timeDim = 3.0, currentDim = 2.0, value = value)

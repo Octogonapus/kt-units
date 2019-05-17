@@ -16,17 +16,29 @@
  */
 package org.octogonapus.ktunits.quantities
 
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
 import org.octogonapus.ktunits.annotation.Quantity
-import org.octogonapus.ktunits.annotation.QuantityBlacklist
-import org.octogonapus.ktunits.annotation.QuantityConversion
-import org.octogonapus.ktunits.annotation.QuantityConversions
-import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0)
-@QuantityConversions(
-    QuantityConversion("volt", 1.0)
-)
-@QuantityBlacklist(Torque::class)
-data class ElectricPotential(
-    override val value: Double
-) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0, value = value)
+internal class MagneticFluxTest {
+
+    @ParameterizedTest
+    @MethodSource("magneticFluxUnitsSource")
+    fun `magnetic flux units tests`(expected: Quantity, actual: Quantity) {
+        assertEquals(expected, actual)
+    }
+
+    companion object {
+
+        @Suppress("unused")
+        @JvmStatic
+        fun magneticFluxUnitsSource() = listOf(
+            Arguments.of(1e-9.weber, 1.nanoweber),
+            Arguments.of(1e-6.weber, 1.microweber),
+            Arguments.of(1e-3.weber, 1.milliweber),
+            Arguments.of(1.weber, 1.weber)
+        )
+    }
+}

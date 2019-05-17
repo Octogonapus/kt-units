@@ -17,6 +17,7 @@
 package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.QuantityBlacklist
 import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
@@ -39,6 +40,7 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("foot", 0.3048),
     QuantityConversion("mile", 1609.344)
 )
+@QuantityBlacklist(Energy::class)
 data class Length(
     override val value: Double
 ) : Quantity(lengthDim = 1.0, value = value)
