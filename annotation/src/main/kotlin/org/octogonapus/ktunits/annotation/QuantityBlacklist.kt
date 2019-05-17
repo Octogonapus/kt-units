@@ -18,6 +18,14 @@ package org.octogonapus.ktunits.annotation
 
 import kotlin.reflect.KClass
 
+/**
+ * This annotation MUST be applied ONLY to classes which inherit from [Quantity] AND are also
+ * annotated with [QuantityType].
+ *
+ * This signals to the annotation processor that generated methods which return one of
+ * [blacklistedClasses] cannot not be `operator`. The annotation processor will instead generate
+ * `timesFoo` and/or `divFoo` methods for a given class `Foo`.
+ */
 @Retention(AnnotationRetention.SOURCE)
 @Target(AnnotationTarget.CLASS)
 annotation class QuantityBlacklist(

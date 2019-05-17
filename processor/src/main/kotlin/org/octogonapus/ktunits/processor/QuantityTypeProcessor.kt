@@ -77,6 +77,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
         val allFunctions = mutableListOf<FunSpec>()
         val allProperties = mutableListOf<PropertySpec>()
 
+        // All the return types we can't generate functions with for a given receiver type
         val blacklists = validateAnnotatedClasses(
             roundEnv.getElementsAnnotatedWith(QuantityBlacklist::class.java)
         ).map {
@@ -92,15 +93,29 @@ class QuantityTypeProcessor : AbstractProcessor() {
             // Emitting multiple functions here will cause conflicting declarations, but it helps
             // the user know the root cause
             annotatedClassesToDimensions.forEach { returnType ->
-                val blacklisted = blacklists[it.a.typeName]?.contains(returnType.element.asType())
-                    ?: false
+                val blacklistedClasses = blacklists[it.a.typeName] ?: emptyList()
+                val blacklisted = blacklistedClasses.contains(returnType.element.asType())
 
-                if (!blacklisted && it.a.isMultiplyCompatible(it.b, returnType)) {
-                    allFunctions.add(buildMultiplyFun(it.a, it.b, returnType))
+                // Generate operator functions for non-blacklisted return types
+                if (!blacklisted) {
+                    if (it.a.isMultiplyCompatible(it.b, returnType)) {
+                        allFunctions.add(buildMultiplyFun(it.a, it.b, returnType))
+                    }
+
+                    if (it.a.isDivideCompatible(it.b, returnType)) {
+                        allFunctions.add(buildDivideFun(it.a, it.b, returnType))
+                    }
                 }
 
-                if (!blacklisted && it.a.isDivideCompatible(it.b, returnType)) {
-                    allFunctions.add(buildDivideFun(it.a, it.b, returnType))
+                // Generate non-operator functions for blacklisted return types
+                if (blacklisted) {
+                    if (it.a.isMultiplyCompatible(it.b, returnType)) {
+                        allFunctions.add(buildBlacklistedMultiplyFun(it.a, it.b, returnType))
+                    }
+
+                    if (it.a.isDivideCompatible(it.b, returnType)) {
+                        allFunctions.add(buildBlacklistedDivideFun(it.a, it.b, returnType))
+                    }
                 }
             }
 
@@ -187,6 +202,19 @@ class QuantityTypeProcessor : AbstractProcessor() {
         '*'
     )
 
+    private fun buildBlacklistedMultiplyFun(
+        receiverType: ElementWithDimensions,
+        parameterType: ElementWithDimensions,
+        returnType: ElementWithDimensions
+    ) = buildMultiplyOrDivideFun(
+        receiverType.typeName,
+        parameterType.typeName,
+        returnType.typeName,
+        "times${returnType.element.simpleName}",
+        '*',
+        false
+    )
+
     private fun buildDivideFun(
         receiverType: ElementWithDimensions,
         parameterType: ElementWithDimensions,
@@ -197,6 +225,19 @@ class QuantityTypeProcessor : AbstractProcessor() {
         returnType.typeName,
         "div",
         '/'
+    )
+
+    private fun buildBlacklistedDivideFun(
+        receiverType: ElementWithDimensions,
+        parameterType: ElementWithDimensions,
+        returnType: ElementWithDimensions
+    ) = buildMultiplyOrDivideFun(
+        receiverType.typeName,
+        parameterType.typeName,
+        returnType.typeName,
+        "div${returnType.element.simpleName}",
+        '/',
+        false
     )
 
     private fun buildPlusFun(
@@ -224,9 +265,11 @@ class QuantityTypeProcessor : AbstractProcessor() {
         parameterType: TypeName,
         returnType: TypeName,
         name: String,
-        op: Char
+        op: Char,
+        isOperator: Boolean = true
     ) = FunSpec.builder(name)
-        .addModifiers(KModifier.PUBLIC, KModifier.OPERATOR)
+        .addModifiers(KModifier.PUBLIC)
+        .apply { if (isOperator) addModifiers(KModifier.OPERATOR) }
         .receiver(receiverType)
         .addParameter("other", parameterType)
         .returns(returnType)
