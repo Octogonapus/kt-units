@@ -55,8 +55,34 @@ open class Quantity(
     )
 
     fun dimensionsEqual(other: Quantity) =
-        massDim == other.massDim && lengthDim == other.lengthDim && timeDim == other.timeDim &&
-            angleDim == other.angleDim
+        dimensionsEqual(
+            currentDim = other.currentDim,
+            tempDim = other.tempDim,
+            timeDim = other.timeDim,
+            lengthDim = other.lengthDim,
+            massDim = other.massDim,
+            luminDim = other.luminDim,
+            moleDim = other.moleDim,
+            angleDim = other.angleDim
+        )
+
+    fun dimensionsEqual(
+        currentDim: Double = 0.0,
+        tempDim: Double = 0.0,
+        timeDim: Double = 0.0,
+        lengthDim: Double = 0.0,
+        massDim: Double = 0.0,
+        luminDim: Double = 0.0,
+        moleDim: Double = 0.0,
+        angleDim: Double = 0.0
+    ) = this.currentDim == currentDim &&
+        this.tempDim == tempDim &&
+        this.timeDim == timeDim &&
+        this.lengthDim == lengthDim &&
+        this.massDim == massDim &&
+        this.luminDim == luminDim &&
+        this.moleDim == moleDim &&
+        this.angleDim == angleDim
 
     fun makeCopy(newValue: Double) = Quantity(
         currentDim = currentDim,
@@ -74,9 +100,13 @@ open class Quantity(
         if (this === other) return true
         if (other !is Quantity) return false
 
-        if (massDim != other.massDim) return false
-        if (lengthDim != other.lengthDim) return false
+        if (currentDim != other.currentDim) return false
+        if (tempDim != other.tempDim) return false
         if (timeDim != other.timeDim) return false
+        if (lengthDim != other.lengthDim) return false
+        if (massDim != other.massDim) return false
+        if (luminDim != other.luminDim) return false
+        if (moleDim != other.moleDim) return false
         if (angleDim != other.angleDim) return false
         if (value != other.value) return false
 
@@ -84,16 +114,21 @@ open class Quantity(
     }
 
     override fun hashCode(): Int {
-        var result = massDim.hashCode()
-        result = 31 * result + lengthDim.hashCode()
+        var result = currentDim.hashCode()
+        result = 31 * result + tempDim.hashCode()
         result = 31 * result + timeDim.hashCode()
+        result = 31 * result + lengthDim.hashCode()
+        result = 31 * result + massDim.hashCode()
+        result = 31 * result + luminDim.hashCode()
+        result = 31 * result + moleDim.hashCode()
         result = 31 * result + angleDim.hashCode()
         result = 31 * result + value.hashCode()
         return result
     }
 
     override fun toString(): String {
-        return "Quantity(massDim=$massDim, lengthDim=$lengthDim, timeDim=$timeDim, " +
+        return "Quantity(currentDim=$currentDim, tempDim=$tempDim, timeDim=$timeDim, " +
+            "lengthDim=$lengthDim, massDim=$massDim, luminDim=$luminDim, moleDim=$moleDim, " +
             "angleDim=$angleDim, value=$value)"
     }
 }
