@@ -42,4 +42,24 @@ import org.octogonapus.ktunits.annotation.QuantityType
 @QuantityBlacklist(Torque::class)
 data class Power(
     override val value: Double
-) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, value = value)
+) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, value = value) {
+    companion object {
+        fun from(other: Quantity): Power {
+            if (other.dimensionsEqual(
+                    lengthDim = 2.0,
+                    massDim = 1.0,
+                    timeDim = -3.0
+                )
+            ) {
+                return Power(other.value)
+            } else {
+                throw IllegalArgumentException(
+                    """
+                    |Cannot convert quantity to Power:
+                    |$other
+                    """.trimMargin()
+                )
+            }
+        }
+    }
+}

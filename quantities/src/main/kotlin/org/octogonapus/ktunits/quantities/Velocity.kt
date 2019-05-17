@@ -32,4 +32,23 @@ import org.octogonapus.ktunits.annotation.QuantityType
 )
 data class Velocity(
     override val value: Double
-) : Quantity(timeDim = -1.0, lengthDim = 1.0, value = value)
+) : Quantity(timeDim = -1.0, lengthDim = 1.0, value = value) {
+    companion object {
+        fun from(other: Quantity): Velocity {
+            if (other.dimensionsEqual(
+                    lengthDim = 1.0,
+                    timeDim = -1.0
+                )
+            ) {
+                return Velocity(other.value)
+            } else {
+                throw IllegalArgumentException(
+                    """
+                    |Cannot convert quantity to Velocity:
+                    |$other
+                    """.trimMargin()
+                )
+            }
+        }
+    }
+}

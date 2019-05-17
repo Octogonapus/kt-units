@@ -33,4 +33,23 @@ import org.octogonapus.ktunits.annotation.QuantityType
 @QuantityBlacklist(Torque::class)
 data class Charge(
     override val value: Double
-) : Quantity(timeDim = 1.0, currentDim = 1.0, value = value)
+) : Quantity(timeDim = 1.0, currentDim = 1.0, value = value) {
+    companion object {
+        fun from(other: Quantity): Charge {
+            if (other.dimensionsEqual(
+                    timeDim = 1.0,
+                    currentDim = 1.0
+                )
+            ) {
+                return Charge(other.value)
+            } else {
+                throw IllegalArgumentException(
+                    """
+                    |Cannot convert quantity to Charge:
+                    |$other
+                    """.trimMargin()
+                )
+            }
+        }
+    }
+}

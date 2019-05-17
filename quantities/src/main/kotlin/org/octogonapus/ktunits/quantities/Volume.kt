@@ -37,4 +37,22 @@ import org.octogonapus.ktunits.annotation.QuantityType
 @QuantityBlacklist(Torque::class)
 data class Volume(
     override val value: Double
-) : Quantity(lengthDim = 3.0, value = value)
+) : Quantity(lengthDim = 3.0, value = value) {
+    companion object {
+        fun from(other: Quantity): Volume {
+            if (other.dimensionsEqual(
+                    lengthDim = 3.0
+                )
+            ) {
+                return Volume(other.value)
+            } else {
+                throw IllegalArgumentException(
+                    """
+                    |Cannot convert quantity to Volume:
+                    |$other
+                    """.trimMargin()
+                )
+            }
+        }
+    }
+}

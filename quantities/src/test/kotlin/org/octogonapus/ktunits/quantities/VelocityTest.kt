@@ -17,6 +17,8 @@
 package org.octogonapus.ktunits.quantities
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -28,6 +30,21 @@ internal class VelocityTest {
     @MethodSource("velocityUnitsSource")
     fun `velocity units tests`(expected: Quantity, actual: Quantity) {
         assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `from test success`() {
+        assertEquals(
+            1.mps,
+            Velocity.from(1.meter / 1.second)
+        )
+    }
+
+    @Test
+    fun `from test failure`() {
+        assertThrows<IllegalArgumentException> {
+            Velocity.from(1.volt)
+        }
     }
 
     companion object {

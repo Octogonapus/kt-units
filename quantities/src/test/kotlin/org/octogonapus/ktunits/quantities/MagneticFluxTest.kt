@@ -17,6 +17,8 @@
 package org.octogonapus.ktunits.quantities
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.assertThrows
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -28,6 +30,21 @@ internal class MagneticFluxTest {
     @MethodSource("magneticFluxUnitsSource")
     fun `magnetic flux units tests`(expected: Quantity, actual: Quantity) {
         assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `from test success`() {
+        assertEquals(
+            1.weber,
+            MagneticFlux.from(1.tesla * 1.sqMeter)
+        )
+    }
+
+    @Test
+    fun `from test failure`() {
+        assertThrows<IllegalArgumentException> {
+            MagneticFlux.from(1.tesla)
+        }
     }
 
     companion object {

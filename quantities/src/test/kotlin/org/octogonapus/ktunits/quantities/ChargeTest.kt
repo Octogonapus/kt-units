@@ -17,6 +17,8 @@
 package org.octogonapus.ktunits.quantities
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -28,6 +30,23 @@ internal class ChargeTest {
     @MethodSource("chargeUnitsSource")
     fun `charge units tests`(expected: Quantity, actual: Quantity) {
         assertEquals(expected, actual)
+    }
+
+    @Test
+    fun `from test success`() {
+        assertEquals(
+            1.coulomb,
+            Charge.from(
+                (1.second * 1.ampere)
+            )
+        )
+    }
+
+    @Test
+    fun `from test failure`() {
+        assertThrows<IllegalArgumentException> {
+            Charge.from(1.volt)
+        }
     }
 
     companion object {
