@@ -40,7 +40,7 @@ internal class ElectricConductanceTest {
         assertEquals(
             1.siemens,
             ElectricConductance.from(
-                (1.second.pow(3) * 1.ampere.pow(2) / (1.kilogram * 1.meter.pow(2)))
+                1.second.pow(3) * 1.ampere.pow(2) / (1.kilogram * 1.meter.pow(2))
             )
         )
     }

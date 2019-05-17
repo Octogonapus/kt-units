@@ -32,21 +32,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
 data class Area(
     override val value: Double
 ) : Quantity(lengthDim = 2.0, value = value) {
-    companion object {
-        fun from(other: Quantity): Area {
-            if (other.dimensionsEqual(
-                    lengthDim = 2.0
-                )
-            ) {
-                return Area(other.value)
-            } else {
-                throw IllegalArgumentException(
-                    """
-                    |Cannot convert quantity to Area:
-                    |$other
-                    """.trimMargin()
-                )
-            }
-        }
-    }
+    companion object
 }

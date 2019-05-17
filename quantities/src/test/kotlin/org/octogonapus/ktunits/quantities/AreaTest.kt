@@ -35,12 +35,7 @@ internal class AreaTest {
 
     @Test
     fun `from test success`() {
-        assertEquals(
-            1.sqMeter,
-            Area.from(
-                (1.meter.pow(2))
-            )
-        )
+        assertEquals(1.sqMeter, Area.from(1.meter.pow(2)))
     }
 
     @Test

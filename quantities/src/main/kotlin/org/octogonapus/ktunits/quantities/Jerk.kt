@@ -23,22 +23,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
 data class Jerk(
     override val value: Double
 ) : Quantity(timeDim = -3.0, lengthDim = 1.0, value = value) {
-    companion object {
-        fun from(other: Quantity): Jerk {
-            if (other.dimensionsEqual(
-                    lengthDim = 1.0,
-                    timeDim = -3.0
-                )
-            ) {
-                return Jerk(other.value)
-            } else {
-                throw IllegalArgumentException(
-                    """
-                    |Cannot convert quantity to Jerk:
-                    |$other
-                    """.trimMargin()
-                )
-            }
-        }
-    }
+    companion object
 }

@@ -32,23 +32,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
 data class Torque(
     override val value: Double
 ) : Quantity(timeDim = -2.0, lengthDim = 2.0, massDim = 1.0, value = value) {
-    companion object {
-        fun from(other: Quantity): Torque {
-            if (other.dimensionsEqual(
-                    lengthDim = 2.0,
-                    massDim = 1.0,
-                    timeDim = -2.0
-                )
-            ) {
-                return Torque(other.value)
-            } else {
-                throw IllegalArgumentException(
-                    """
-                    |Cannot convert quantity to Torque:
-                    |$other
-                    """.trimMargin()
-                )
-            }
-        }
-    }
+    companion object
 }

@@ -33,24 +33,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
 data class MagneticFlux(
     override val value: Double
 ) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -2.0, currentDim = -1.0, value = value) {
-    companion object {
-        fun from(other: Quantity): MagneticFlux {
-            if (other.dimensionsEqual(
-                    lengthDim = 2.0,
-                    massDim = 1.0,
-                    timeDim = -2.0,
-                    currentDim = -1.0
-                )
-            ) {
-                return MagneticFlux(other.value)
-            } else {
-                throw IllegalArgumentException(
-                    """
-                    |Cannot convert quantity to MagneticFlux:
-                    |$other
-                    """.trimMargin()
-                )
-            }
-        }
-    }
+    companion object
 }

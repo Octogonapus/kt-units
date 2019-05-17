@@ -32,23 +32,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
 data class Pressure(
     override val value: Double
 ) : Quantity(timeDim = -2.0, lengthDim = -1.0, massDim = 1.0, value = value) {
-    companion object {
-        fun from(other: Quantity): Pressure {
-            if (other.dimensionsEqual(
-                    lengthDim = -1.0,
-                    massDim = 1.0,
-                    timeDim = -2.0
-                )
-            ) {
-                return Pressure(other.value)
-            } else {
-                throw IllegalArgumentException(
-                    """
-                    |Cannot convert quantity to Pressure:
-                    |$other
-                    """.trimMargin()
-                )
-            }
-        }
-    }
+    companion object
 }

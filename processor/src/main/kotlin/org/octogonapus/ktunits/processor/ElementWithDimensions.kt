@@ -24,6 +24,8 @@ internal data class ElementWithDimensions(
     val dimensions: DimensionData
 ) {
 
+    constructor(element: Element) : this(element, element.getDimensionData())
+
     val typeName by lazy {
         element.asType().asTypeName()
     }

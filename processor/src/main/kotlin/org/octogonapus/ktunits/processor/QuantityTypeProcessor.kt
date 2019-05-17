@@ -27,6 +27,7 @@ import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.asTypeName
+import org.octogonapus.ktunits.annotation.Quantity
 import org.octogonapus.ktunits.annotation.QuantityBlacklist
 import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
@@ -49,6 +50,7 @@ import javax.tools.Diagnostic
 /**
  * Generates plus, minus, times, and div operators for all annotated quantities.
  */
+@SuppressWarnings("TooManyFunctions")
 @AutoService(Processor::class)
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedOptions(QuantityTypeProcessor.KAPT_KOTLIN_GENERATED_OPTION_NAME)
@@ -56,6 +58,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
 
     override fun getSupportedAnnotationTypes() = setOf(QuantityType::class.java.canonicalName)
 
+    @SuppressWarnings("ComplexMethod", "NestedBlockDepth")
     override fun process(
         annotations: MutableSet<out TypeElement>,
         roundEnv: RoundEnvironment
@@ -143,6 +146,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
             allFunctions.add(buildAbsFun(typeName))
             allFunctions.add(buildCutRangeFun(typeName))
             allFunctions.add(buildMapFun(typeName))
+            allFunctions.add(buildFromFun(ElementWithDimensions(element)))
 
             val conversions = element.getAnnotation(QuantityConversions::class.java)
             val conversionFuns = conversions?.values?.flatMap {
@@ -260,6 +264,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
             )
             .build()
 
+    @SuppressWarnings("LongParameterList")
     private fun buildMultiplyOrDivideFun(
         receiverType: TypeName,
         parameterType: TypeName,
@@ -432,6 +437,46 @@ class QuantityTypeProcessor : AbstractProcessor() {
             |return %T((value - oldMin) * ((newMax - newMin) / (oldMax - oldMin)) + newMin)
             """.trimMargin(),
             receiverType
+        )
+        .build()
+
+    private fun Element.typeName() = asType().asTypeName()
+
+    private fun Element.enclosedCompanion() =
+        enclosedElements.first { it.simpleName.contentEquals("Companion") }
+
+    private fun buildFromFun(
+        receiverElement: ElementWithDimensions
+    ) = FunSpec.builder("from")
+        .addModifiers(KModifier.PUBLIC)
+        .receiver(receiverElement.element.enclosedCompanion().typeName())
+        .returns(receiverElement.typeName)
+        .addParameter("other", Quantity::class)
+        .addStatement(
+            """
+            if (other.dimensionsEqual(
+                    currentDim = ${receiverElement.dimensions.currentDim},
+                    tempDim = ${receiverElement.dimensions.tempDim},
+                    timeDim = ${receiverElement.dimensions.timeDim},
+                    lengthDim = ${receiverElement.dimensions.lengthDim},
+                    massDim = ${receiverElement.dimensions.massDim},
+                    luminDim = ${receiverElement.dimensions.luminDim},
+                    moleDim = ${receiverElement.dimensions.moleDim},
+                    angleDim = ${receiverElement.dimensions.angleDim}
+                )
+            ) {
+                return %T(other.value)
+            } else {
+                throw IllegalArgumentException(
+                    ""${'"'}
+                    |Cannot convert quantity to %T:
+                    |${'$'}other
+                    ""${'"'}.trimMargin()
+                )
+            }
+            """.trimIndent(),
+            receiverElement.typeName,
+            receiverElement.typeName
         )
         .build()
 

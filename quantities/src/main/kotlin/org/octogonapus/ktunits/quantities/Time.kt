@@ -40,21 +40,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
 data class Time(
     override val value: Double
 ) : Quantity(timeDim = 1.0, value = value) {
-    companion object {
-        fun from(other: Quantity): Time {
-            if (other.dimensionsEqual(
-                    timeDim = 1.0
-                )
-            ) {
-                return Time(other.value)
-            } else {
-                throw IllegalArgumentException(
-                    """
-                    |Cannot convert quantity to Time:
-                    |$other
-                    """.trimMargin()
-                )
-            }
-        }
-    }
+    companion object
 }

@@ -44,21 +44,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
 data class Length(
     override val value: Double
 ) : Quantity(lengthDim = 1.0, value = value) {
-    companion object {
-        fun from(other: Quantity): Length {
-            if (other.dimensionsEqual(
-                    lengthDim = 1.0
-                )
-            ) {
-                return Length(other.value)
-            } else {
-                throw IllegalArgumentException(
-                    """
-                    |Cannot convert quantity to Length:
-                    |$other
-                    """.trimMargin()
-                )
-            }
-        }
-    }
+    companion object
 }

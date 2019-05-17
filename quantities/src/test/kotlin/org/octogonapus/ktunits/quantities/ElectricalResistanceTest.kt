@@ -40,7 +40,7 @@ internal class ElectricalResistanceTest {
         assertEquals(
             1.ohm,
             ElectricalResistance.from(
-                (1.kilogram * 1.meter.pow(2)) / (1.second.pow(3) * 1.ampere.pow(2))
+                1.kilogram * 1.meter.pow(2) / (1.second.pow(3) * 1.ampere.pow(2))
             )
         )
     }

@@ -20,14 +20,14 @@ import org.octogonapus.ktunits.annotation.QuantityType
 import javax.lang.model.element.Element
 
 internal data class DimensionData(
-    private val currentDim: Double,
-    private val tempDim: Double,
-    private val timeDim: Double,
-    private val lengthDim: Double,
-    private val massDim: Double,
-    private val luminDim: Double,
-    private val moleDim: Double,
-    private val angleDim: Double
+    val currentDim: Double,
+    val tempDim: Double,
+    val timeDim: Double,
+    val lengthDim: Double,
+    val massDim: Double,
+    val luminDim: Double,
+    val moleDim: Double,
+    val angleDim: Double
 ) {
 
     operator fun plus(other: DimensionData) =

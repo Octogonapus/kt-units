@@ -30,24 +30,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
 data class ElectricalResistance(
     override val value: Double
 ) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -2.0, value = value) {
-    companion object {
-        fun from(other: Quantity): ElectricalResistance {
-            if (other.dimensionsEqual(
-                    lengthDim = 2.0,
-                    massDim = 1.0,
-                    timeDim = -3.0,
-                    currentDim = -2.0
-                )
-            ) {
-                return ElectricalResistance(other.value)
-            } else {
-                throw IllegalArgumentException(
-                    """
-                    |Cannot convert quantity to ElectricalResistance:
-                    |$other
-                    """.trimMargin()
-                )
-            }
-        }
-    }
+    companion object
 }

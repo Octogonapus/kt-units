@@ -17,12 +17,15 @@
 package org.octogonapus.ktunits.quantities
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.pow
+import org.octogonapus.ktunits.annotation.div
+import org.octogonapus.ktunits.annotation.times
 
 internal class PowerTest {
 
@@ -34,10 +37,7 @@ internal class PowerTest {
 
     @Test
     fun `from test success`() {
-        assertEquals(
-            1.watt,
-            Power.from(1.joule / 1.second)
-        )
+        assertEquals(1.watt, Power.from(1.kilogram * 1.meter.pow(2) / 1.second.pow(3)))
     }
 
     @Test

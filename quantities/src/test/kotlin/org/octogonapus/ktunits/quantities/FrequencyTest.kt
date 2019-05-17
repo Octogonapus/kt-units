@@ -35,10 +35,7 @@ internal class FrequencyTest {
 
     @Test
     fun `from test success`() {
-        assertEquals(
-            1.hz,
-            Frequency.from(1.second.pow(-1))
-        )
+        assertEquals(1.hz, Frequency.from(1.second.pow(-1)))
     }
 
     @Test

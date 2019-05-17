@@ -30,24 +30,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
 data class ElectricPotential(
     override val value: Double
 ) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -3.0, currentDim = -1.0, value = value) {
-    companion object {
-        fun from(other: Quantity): ElectricPotential {
-            if (other.dimensionsEqual(
-                    lengthDim = 2.0,
-                    massDim = 1.0,
-                    timeDim = -3.0,
-                    currentDim = -1.0
-                )
-            ) {
-                return ElectricPotential(other.value)
-            } else {
-                throw IllegalArgumentException(
-                    """
-                    |Cannot convert quantity to ElectricPotential:
-                    |$other
-                    """.trimMargin()
-                )
-            }
-        }
-    }
+    companion object
 }

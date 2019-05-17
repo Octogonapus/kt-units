@@ -17,8 +17,8 @@
 package org.octogonapus.ktunits.quantities
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -40,7 +40,7 @@ internal class ElectricCapacitanceTest {
         assertEquals(
             1.farad,
             ElectricCapacitance.from(
-                (1.ampere.pow(2) * 1.second.pow(4) / 1.meter.pow(2) / 1.kilogram)
+                1.ampere.pow(2) * 1.second.pow(4) / (1.meter.pow(2) * 1.kilogram)
             )
         )
     }

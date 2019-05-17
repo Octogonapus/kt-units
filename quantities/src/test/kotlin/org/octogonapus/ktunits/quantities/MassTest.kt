@@ -17,8 +17,8 @@
 package org.octogonapus.ktunits.quantities
 
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
@@ -34,10 +34,7 @@ internal class MassTest {
 
     @Test
     fun `from test success`() {
-        assertEquals(
-            1.kilogram,
-            Mass.from(1.newton / (1.mps / 1.second))
-        )
+        assertEquals(1.kilogram, Mass.from(1.newton / (1.mps / 1.second)))
     }
 
     @Test

@@ -29,21 +29,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
 data class Frequency(
     override val value: Double
 ) : Quantity(timeDim = -1.0, value = value) {
-    companion object {
-        fun from(other: Quantity): Frequency {
-            if (other.dimensionsEqual(
-                    timeDim = -1.0
-                )
-            ) {
-                return Frequency(other.value)
-            } else {
-                throw IllegalArgumentException(
-                    """
-                    |Cannot convert quantity to Frequency:
-                    |$other
-                    """.trimMargin()
-                )
-            }
-        }
-    }
+    companion object
 }

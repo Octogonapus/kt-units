@@ -23,6 +23,9 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.octogonapus.ktunits.annotation.Quantity
+import org.octogonapus.ktunits.annotation.pow
+import org.octogonapus.ktunits.annotation.div
+import org.octogonapus.ktunits.annotation.times
 
 internal class ForceTest {
 
@@ -34,10 +37,7 @@ internal class ForceTest {
 
     @Test
     fun `from test success`() {
-        assertEquals(
-            1.newton,
-            Force.from(1.kilogram * (1.mps / 1.second))
-        )
+        assertEquals(1.newton, Force.from(1.kilogram * 1.meter / 1.second.pow(2)))
     }
 
     @Test

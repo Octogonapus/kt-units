@@ -36,23 +36,5 @@ import org.octogonapus.ktunits.annotation.QuantityType
 data class Energy(
     override val value: Double
 ) : Quantity(lengthDim = 2.0, massDim = 1.0, timeDim = -2.0, value = value) {
-    companion object {
-        fun from(other: Quantity): Energy {
-            if (other.dimensionsEqual(
-                    lengthDim = 2.0,
-                    massDim = 1.0,
-                    timeDim = -2.0
-                )
-            ) {
-                return Energy(other.value)
-            } else {
-                throw IllegalArgumentException(
-                    """
-                    |Cannot convert quantity to Energy:
-                    |$other
-                    """.trimMargin()
-                )
-            }
-        }
-    }
+    companion object
 }

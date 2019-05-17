@@ -66,6 +66,7 @@ open class Quantity(
             angleDim = other.angleDim
         )
 
+    @SuppressWarnings("LongParameterList")
     fun dimensionsEqual(
         currentDim: Double = 0.0,
         tempDim: Double = 0.0,
@@ -96,6 +97,7 @@ open class Quantity(
         value = newValue
     )
 
+    @SuppressWarnings("ComplexMethod")
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other !is Quantity) return false
