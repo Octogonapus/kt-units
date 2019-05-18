@@ -550,7 +550,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
         .addParameter("other", paramType)
         .addStatement(
             """
-            |return %T(this.toDouble() / other.value)
+            |return %T(toDouble() / other.value)
             """.trimMargin(),
             returnType
         )
