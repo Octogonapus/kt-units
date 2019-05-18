@@ -296,9 +296,7 @@ fun <T : Quantity> min(a: T, b: T): T = when {
     a.value != a.value -> a
 
     // Raw conversion ok since NaN can't map to -0.0.
-    a.value == 0.0 &&
-        b.value == 0.0 &&
-        doubleToRawLongBits(b.value) == negativeZeroDoubleBits -> b
+    a.value == 0.0 && b.value == 0.0 && doubleToRawLongBits(b.value) == negativeZeroDoubleBits -> b
 
     else -> if (a.value <= b.value) a else b
 }
