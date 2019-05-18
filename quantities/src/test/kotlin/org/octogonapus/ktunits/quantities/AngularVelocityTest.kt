@@ -24,23 +24,23 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.octogonapus.ktunits.annotation.Quantity
 
-internal class ChargeTest {
+internal class AngularVelocityTest {
 
     @ParameterizedTest
-    @MethodSource("chargeUnitsSource")
-    fun `charge units tests`(expected: Quantity, actual: Quantity) {
+    @MethodSource("unitsSource")
+    fun `units tests`(expected: Quantity, actual: Quantity) {
         assertEquals(expected, actual)
     }
 
     @Test
     fun `from test success`() {
-        assertEquals(1.coulomb, Charge.from(1.second * 1.ampere))
+        assertEquals(1.radianPerSecond, 1.radian / 1.second)
     }
 
     @Test
     fun `from test failure`() {
         assertThrows<IllegalArgumentException> {
-            Charge.from(1.volt)
+            AngularVelocity.from(1.meter)
         }
     }
 
@@ -48,12 +48,13 @@ internal class ChargeTest {
 
         @Suppress("unused")
         @JvmStatic
-        fun chargeUnitsSource() = listOf(
-            Arguments.of(1e-12.coulomb, 1.picocoulomb),
-            Arguments.of(1e-9.coulomb, 1.nanocoulomb),
-            Arguments.of(1e-6.coulomb, 1.microcoulomb),
-            Arguments.of(1e-3.coulomb, 1.millicoulomb),
-            Arguments.of(1.coulomb, 1.coulomb)
+        fun unitsSource() = listOf(
+            Arguments.of(1.radianPerSecond, 1.radianPerSecond),
+            Arguments.of(0.01667.radianPerSecond, 1.radianPerMinute),
+            Arguments.of(2.778e-4.radianPerSecond, 1.radianPerHour),
+            Arguments.of(0.01745.radianPerSecond, 1.degreePerSecond),
+            Arguments.of(2.909e-4.radianPerSecond, 1.degreePerMinute),
+            Arguments.of(4.848e-6.radianPerSecond, 1.degreePerHour)
         )
     }
 }

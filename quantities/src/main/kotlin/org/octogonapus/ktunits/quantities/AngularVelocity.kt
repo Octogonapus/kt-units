@@ -21,17 +21,17 @@ import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(timeDim = -2.0, lengthDim = 2.0, massDim = 1.0)
+@QuantityType(timeDim = -1.0, angleDim = 1.0)
 @QuantityConversions(
-    QuantityConversion("nM", 1.0),
-    QuantityConversion("kgFM", 0.102),
-    QuantityConversion("kgFCm", 0.09807),
-    QuantityConversion("lbFFt", 0.7376),
-    QuantityConversion("lbFIn", 0.113),
-    QuantityConversion("ozFIn", 7.062 * 1e-3)
+    QuantityConversion("radianPerSecond", 1.0),
+    QuantityConversion("radianPerMinute", 0.01667),
+    QuantityConversion("radianPerHour", 2.778e-4),
+    QuantityConversion("degreePerSecond", 0.01745),
+    QuantityConversion("degreePerMinute", 2.909e-4),
+    QuantityConversion("degreePerHour", 4.848e-6)
 )
-data class Torque(
+data class AngularVelocity(
     override val value: Double
-) : Quantity(timeDim = -2.0, lengthDim = 2.0, massDim = 1.0, value = value) {
+) : Quantity(timeDim = -1.0, angleDim = 1.0, value = value) {
     companion object
 }

@@ -189,6 +189,13 @@ operator fun Quantity.times(other: Quantity) = Quantity(
 )
 
 /**
+ * Returns the product of [this] and [other].
+ *
+ * This is an extension function so that it can be overloaded with generated extension functions.
+ */
+operator fun Quantity.times(other: Number) = makeCopy(value * other.toDouble())
+
+/**
  * Returns the quotient of [this] and [other].
  *
  * This is an extension function so that it can be overloaded with generated extension functions.
@@ -204,6 +211,13 @@ operator fun Quantity.div(other: Quantity) = Quantity(
     angleDim = angleDim - other.angleDim,
     value = value / other.value
 )
+
+/**
+ * Returns the quotient of [this] and [other].
+ *
+ * This is an extension function so that it can be overloaded with generated extension functions.
+ */
+operator fun Quantity.div(other: Number) = makeCopy(value / other.toDouble())
 
 /**
  * Computes the positive square root of this value.

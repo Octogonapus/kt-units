@@ -23,27 +23,24 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.octogonapus.ktunits.annotation.Quantity
-import org.octogonapus.ktunits.annotation.div
-import org.octogonapus.ktunits.annotation.pow
-import org.octogonapus.ktunits.annotation.times
 
-internal class TorqueTest {
+internal class ElectricChargeTest {
 
     @ParameterizedTest
-    @MethodSource("torqueUnitsSource")
-    fun `torque units tests`(expected: Quantity, actual: Quantity) {
+    @MethodSource("chargeUnitsSource")
+    fun `charge units tests`(expected: Quantity, actual: Quantity) {
         assertEquals(expected, actual)
     }
 
     @Test
     fun `from test success`() {
-        assertEquals(1.nM, Torque.from(1.kilogram * 1.meter.pow(2) / 1.second.pow(2)))
+        assertEquals(1.coulomb, ElectricCharge.from(1.second * 1.ampere))
     }
 
     @Test
     fun `from test failure`() {
         assertThrows<IllegalArgumentException> {
-            Torque.from(1.volt)
+            ElectricCharge.from(1.volt)
         }
     }
 
@@ -51,13 +48,14 @@ internal class TorqueTest {
 
         @Suppress("unused")
         @JvmStatic
-        fun torqueUnitsSource() = listOf(
-            Arguments.of(1.nM, 1.nM),
-            Arguments.of(0.102.nM, 1.kgFM),
-            Arguments.of(0.09807.nM, 1.kgFCm),
-            Arguments.of(0.7376.nM, 1.lbFFt),
-            Arguments.of(0.113.nM, 1.lbFIn),
-            Arguments.of((7.062 * 1e-3).nM, 1.ozFIn)
+        fun chargeUnitsSource() = listOf(
+            Arguments.of(1e-12.coulomb, 1.picocoulomb),
+            Arguments.of(1e-9.coulomb, 1.nanocoulomb),
+            Arguments.of(1e-6.coulomb, 1.microcoulomb),
+            Arguments.of(1e-3.coulomb, 1.millicoulomb),
+            Arguments.of(1.coulomb, 1.coulomb),
+            Arguments.of(3600.coulomb, 1.ampereHour),
+            Arguments.of(3.6.coulomb, 1.milliampereHour)
         )
     }
 }

@@ -147,6 +147,8 @@ class QuantityTypeProcessor : AbstractProcessor() {
             allFunctions.add(buildCutRangeFun(typeName))
             allFunctions.add(buildMapFun(typeName))
             allFunctions.add(buildFromFun(ElementWithDimensions(element)))
+            allFunctions.addAll(buildNumberMultiplyFuns(typeName))
+            allFunctions.add(buildNumberDivideFun(typeName))
 
             val conversions = element.getAnnotation(QuantityConversions::class.java)
             val conversionFuns = conversions?.values?.flatMap {
@@ -487,6 +489,50 @@ class QuantityTypeProcessor : AbstractProcessor() {
             """.trimIndent(),
             receiverElement.typeName,
             receiverElement.typeName
+        )
+        .build()
+
+    private fun buildNumberMultiplyFuns(
+        receiverType: TypeName
+    ) = listOf(
+        FunSpec.builder("times")
+            .addModifiers(KModifier.PUBLIC, KModifier.OPERATOR)
+            .receiver(receiverType)
+            .returns(receiverType)
+            .addParameter("other", Number::class)
+            .addStatement(
+                """
+                |return %T(value * other.toDouble())
+                """.trimMargin(),
+                receiverType
+            )
+            .build(),
+        FunSpec.builder("times")
+            .addModifiers(KModifier.PUBLIC, KModifier.OPERATOR)
+            .receiver(Number::class)
+            .returns(receiverType)
+            .addParameter("other", receiverType)
+            .addStatement(
+                """
+                |return %T(other.value * this.toDouble())
+                """.trimMargin(),
+                receiverType
+            )
+            .build()
+    )
+
+    private fun buildNumberDivideFun(
+        receiverType: TypeName
+    ) = FunSpec.builder("div")
+        .addModifiers(KModifier.PUBLIC, KModifier.OPERATOR)
+        .receiver(receiverType)
+        .returns(receiverType)
+        .addParameter("other", Number::class)
+        .addStatement(
+            """
+            |return %T(value / other.toDouble())
+            """.trimMargin(),
+            receiverType
         )
         .build()
 

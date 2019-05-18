@@ -28,10 +28,12 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("nanocoulomb", 1e-9),
     QuantityConversion("microcoulomb", 1e-6),
     QuantityConversion("millicoulomb", 1e-3),
-    QuantityConversion("coulomb", 1.0)
+    QuantityConversion("coulomb", 1.0),
+    QuantityConversion("ampereHour", 3600.0),
+    QuantityConversion("milliampereHour", 3.6)
 )
 @QuantityBlacklist(Torque::class)
-data class Charge(
+data class ElectricCharge(
     override val value: Double
 ) : Quantity(timeDim = 1.0, currentDim = 1.0, value = value) {
     companion object
