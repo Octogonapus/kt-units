@@ -49,3 +49,7 @@ internal fun ElementWithDimensions.isPowCompatible(
     other: ElementWithDimensions,
     power: Double
 ) = dimensions * power == other.dimensions
+
+internal fun ElementWithDimensions.isInverseCompatible(
+    other: ElementWithDimensions
+) = dimensions + other.dimensions == DimensionData.allDimsEqualTo(0.0)

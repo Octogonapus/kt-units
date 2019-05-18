@@ -36,6 +36,11 @@ internal class ElectricConductanceTest {
     }
 
     @Test
+    fun `test inverse ohm`() {
+        assertEquals(0.5.siemens, 1 / 2.ohm)
+    }
+
+    @Test
     fun `from test success`() {
         assertEquals(
             1.siemens,

@@ -66,6 +66,18 @@ internal data class DimensionData(
             angleDim = angleDim * factor
         )
 
+    operator fun times(other: DimensionData) =
+        DimensionData(
+            currentDim = currentDim * other.currentDim,
+            tempDim = tempDim * other.tempDim,
+            timeDim = timeDim * other.timeDim,
+            lengthDim = lengthDim * other.lengthDim,
+            massDim = massDim * other.massDim,
+            luminDim = luminDim * other.luminDim,
+            moleDim = moleDim * other.moleDim,
+            angleDim = angleDim * other.angleDim
+        )
+
     operator fun div(denom: Double) =
         DimensionData(
             currentDim = currentDim / denom,
@@ -77,6 +89,20 @@ internal data class DimensionData(
             moleDim = moleDim / denom,
             angleDim = angleDim / denom
         )
+
+    companion object {
+
+        fun allDimsEqualTo(value: Double) = DimensionData(
+            currentDim = value,
+            tempDim = value,
+            timeDim = value,
+            lengthDim = value,
+            massDim = value,
+            luminDim = value,
+            moleDim = value,
+            angleDim = value
+        )
+    }
 }
 
 internal fun Element.getDimensionData() =

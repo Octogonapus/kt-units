@@ -133,6 +133,10 @@ class QuantityTypeProcessor : AbstractProcessor() {
             if (it.a.isPowCompatible(it.b, 3.0)) {
                 allFunctions.add(buildCubedFun(it.a.typeName, it.b.typeName))
             }
+
+            if (it.a.isInverseCompatible(it.b)) {
+                allFunctions.add(buildNumberDivideQuantityFun(it.a.typeName, it.b.typeName))
+            }
         }
 
         annotatedTypeClasses.forEach { element ->
@@ -148,7 +152,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
             allFunctions.add(buildMapFun(typeName))
             allFunctions.add(buildFromFun(ElementWithDimensions(element)))
             allFunctions.addAll(buildNumberMultiplyFuns(typeName))
-            allFunctions.add(buildNumberDivideFun(typeName))
+            allFunctions.add(buildQuantityDivideNumberFun(typeName))
 
             val conversions = element.getAnnotation(QuantityConversions::class.java)
             val conversionFuns = conversions?.values?.flatMap {
@@ -521,7 +525,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
             .build()
     )
 
-    private fun buildNumberDivideFun(
+    private fun buildQuantityDivideNumberFun(
         receiverType: TypeName
     ) = FunSpec.builder("div")
         .addModifiers(KModifier.PUBLIC, KModifier.OPERATOR)
@@ -533,6 +537,22 @@ class QuantityTypeProcessor : AbstractProcessor() {
             |return %T(value / other.toDouble())
             """.trimMargin(),
             receiverType
+        )
+        .build()
+
+    private fun buildNumberDivideQuantityFun(
+        paramType: TypeName,
+        returnType: TypeName
+    ) = FunSpec.builder("div")
+        .addModifiers(KModifier.PUBLIC, KModifier.OPERATOR)
+        .receiver(Number::class)
+        .returns(returnType)
+        .addParameter("other", paramType)
+        .addStatement(
+            """
+            |return %T(this.toDouble() / other.value)
+            """.trimMargin(),
+            returnType
         )
         .build()
 
