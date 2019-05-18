@@ -18,6 +18,7 @@
 
 package org.octogonapus.ktunits.annotation
 
+import java.lang.Double.doubleToRawLongBits
 import kotlin.math.pow
 
 open class Quantity(
@@ -54,17 +55,16 @@ open class Quantity(
         value = value.toDouble()
     )
 
-    fun dimensionsEqual(other: Quantity) =
-        dimensionsEqual(
-            currentDim = other.currentDim,
-            tempDim = other.tempDim,
-            timeDim = other.timeDim,
-            lengthDim = other.lengthDim,
-            massDim = other.massDim,
-            luminDim = other.luminDim,
-            moleDim = other.moleDim,
-            angleDim = other.angleDim
-        )
+    fun dimensionsEqual(other: Quantity) = dimensionsEqual(
+        currentDim = other.currentDim,
+        tempDim = other.tempDim,
+        timeDim = other.timeDim,
+        lengthDim = other.lengthDim,
+        massDim = other.massDim,
+        luminDim = other.luminDim,
+        moleDim = other.moleDim,
+        angleDim = other.angleDim
+    )
 
     @SuppressWarnings("LongParameterList")
     fun dimensionsEqual(
@@ -205,6 +205,142 @@ operator fun Quantity.div(other: Quantity) = Quantity(
     value = value / other.value
 )
 
+/**
+ * Computes the positive square root of this value.
+ *
+ * @return A new value.
+ */
+fun Quantity.sqrt() = Quantity(
+    currentDim = currentDim / 2,
+    tempDim = tempDim / 2,
+    timeDim = timeDim / 2,
+    lengthDim = lengthDim / 2,
+    massDim = massDim / 2,
+    luminDim = luminDim / 2,
+    moleDim = moleDim / 2,
+    angleDim = angleDim / 2,
+    value = kotlin.math.sqrt(value)
+)
+
+/**
+ * Raises this value to the power [exp].
+ *
+ * @param exp The exponent.
+ * @return A new value.
+ */
+fun Quantity.pow(exp: Double) = Quantity(
+    currentDim = currentDim * exp,
+    tempDim = tempDim * exp,
+    timeDim = timeDim * exp,
+    lengthDim = lengthDim * exp,
+    massDim = massDim * exp,
+    luminDim = luminDim * exp,
+    moleDim = moleDim * exp,
+    angleDim = angleDim * exp,
+    value = value.pow(exp)
+)
+
+/**
+ * Raises this value to the power [exp].
+ *
+ * @param exp The exponent.
+ * @return A new value.
+ */
+fun Quantity.pow(exp: Number) = pow(exp.toDouble())
+
+/**
+ * Cuts out a range from the number. The new range of the input number will be
+ * (-inf, min]U[max, +inf). If value sits equally between min and max, max will be returned.
+ *
+ * @param min The lower bound of range.
+ * @param max The upper bound of range.
+ * @return The remapped value.
+ */
+fun Quantity.cutRange(min: Double, max: Double): Quantity {
+    val middle = max - (max - min) / 2
+
+    return makeCopy(
+        if (value > min && value < middle) min
+        else if (value in middle..max) max
+        else value
+    )
+}
+
+/**
+ * Remap a value in the range [oldMin, oldMax] to the range [newMin, newMax].
+ *
+ * @param oldMin The old range lower bound.
+ * @param oldMax The old range upper bound.
+ * @param newMin The new range lower bound.
+ * @param newMax The new range upper bound.
+ * @return The remapped value in the new range [newMin, newMax].
+ */
+fun Quantity.map(
+    oldMin: Double,
+    oldMax: Double,
+    newMin: Double,
+    newMax: Double
+): Quantity = makeCopy((value - oldMin) * ((newMax - newMin) / (oldMax - oldMin)) + newMin)
+
+private val negativeZeroDoubleBits = doubleToRawLongBits(-0.0)
+
+/**
+ * Returns the smaller of two values. If either value is `NaN`, then the result is `NaN`.
+ *
+ * @param a The first value to compare.
+ * @param b The second value to compare.
+ * @return The minimum.
+ */
+fun <T : Quantity> min(a: T, b: T): T = when {
+    // a is NaN
+    a.value != a.value -> a
+
+    // Raw conversion ok since NaN can't map to -0.0.
+    a.value == 0.0 &&
+        b.value == 0.0 &&
+        doubleToRawLongBits(b.value) == negativeZeroDoubleBits -> b
+
+    else -> if (a.value <= b.value) a else b
+}
+
+/**
+ * Returns the greater of two values. If either value is `NaN`, then the result is `NaN`.
+ *
+ * @param a The first value to compare.
+ * @param b The second value to compare.
+ * @return The maximum.
+ */
+fun <T : Quantity> max(a: T, b: T): T = when {
+    // a is NaN
+    a.value != a.value -> a
+
+    // Raw conversion ok since NaN can't map to -0.0.
+    a.value == 0.0 && b.value == 0.0 && doubleToRawLongBits(b.value) == negativeZeroDoubleBits -> b
+
+    else -> if (a.value >= b.value) a else b
+}
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.exp() = kotlin.math.exp(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.expm1() = kotlin.math.expm1(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.log(base: Double) = kotlin.math.log(value, base)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.ln() = kotlin.math.ln(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.log10() = kotlin.math.log10(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.log2() = kotlin.math.log2(value)
+
+@Suppress("NOTHING_TO_INLINE")
+inline fun Quantity.ln1p() = kotlin.math.ln1p(value)
+
 @Suppress("NOTHING_TO_INLINE")
 inline fun Quantity.sin() = kotlin.math.sin(value)
 
@@ -241,52 +377,8 @@ inline fun Quantity.acosh() = kotlin.math.acosh(value)
 @Suppress("NOTHING_TO_INLINE")
 inline fun Quantity.atanh() = kotlin.math.atanh(value)
 
-fun Quantity.sqrt() = Quantity(
-    currentDim = currentDim / 2,
-    tempDim = tempDim / 2,
-    timeDim = timeDim / 2,
-    lengthDim = lengthDim / 2,
-    massDim = massDim / 2,
-    luminDim = luminDim / 2,
-    moleDim = moleDim / 2,
-    angleDim = angleDim / 2,
-    value = kotlin.math.sqrt(value)
-)
-
-fun Quantity.pow(exp: Double) = Quantity(
-    currentDim = currentDim * exp,
-    tempDim = tempDim * exp,
-    timeDim = timeDim * exp,
-    lengthDim = lengthDim * exp,
-    massDim = massDim * exp,
-    luminDim = luminDim * exp,
-    moleDim = moleDim * exp,
-    angleDim = angleDim * exp,
-    value = value.pow(exp)
-)
-
-fun Quantity.pow(exp: Number) = pow(exp.toDouble())
-
 @Suppress("NOTHING_TO_INLINE")
-inline fun Quantity.exp() = kotlin.math.exp(value)
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun Quantity.expm1() = kotlin.math.expm1(value)
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun Quantity.log(base: Double) = kotlin.math.log(value, base)
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun Quantity.ln() = kotlin.math.ln(value)
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun Quantity.log10() = kotlin.math.log10(value)
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun Quantity.log2() = kotlin.math.log2(value)
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun Quantity.ln1p() = kotlin.math.ln1p(value)
+inline fun Quantity.sign() = kotlin.math.sign(value)
 
 fun Quantity.ceil() = makeCopy(kotlin.math.ceil(value))
 
@@ -297,23 +389,3 @@ fun Quantity.truncate() = makeCopy(kotlin.math.truncate(value))
 fun Quantity.round() = makeCopy(kotlin.math.round(value))
 
 fun Quantity.abs() = makeCopy(kotlin.math.abs(value))
-
-@Suppress("NOTHING_TO_INLINE")
-inline fun Quantity.sign() = kotlin.math.sign(value)
-
-fun Quantity.cutRange(min: Double, max: Double): Quantity {
-    val middle = max - (max - min) / 2
-
-    return makeCopy(
-        if (value > min && value < middle) min
-        else if (value in middle..max) max
-        else value
-    )
-}
-
-fun Quantity.map(
-    oldMin: Double,
-    oldMax: Double,
-    newMin: Double,
-    newMax: Double
-): Quantity = makeCopy((value - oldMin) * ((newMax - newMin) / (oldMax - oldMin)) + newMin)

@@ -24,6 +24,7 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
+import kotlin.Double.Companion.NaN
 import kotlin.math.abs
 import kotlin.math.acos
 import kotlin.math.acosh
@@ -54,34 +55,6 @@ import kotlin.math.truncate
 import kotlin.random.Random
 
 internal class QuantityTest {
-
-    private fun quantityWithDims(dim: Number, value: Number) = quantityWithDims({ dim }, value)
-
-    private fun quantityWithDims(dimGenerator: (Int) -> Number, value: Number) = Quantity(
-        currentDim = dimGenerator(1),
-        tempDim = dimGenerator(2),
-        timeDim = dimGenerator(3),
-        lengthDim = dimGenerator(4),
-        massDim = dimGenerator(5),
-        luminDim = dimGenerator(6),
-        moleDim = dimGenerator(7),
-        angleDim = dimGenerator(8),
-        value = value
-    )
-
-    private fun quantityWithRandomDims(value: Number = 0) = Random.Default.quantityWithRandomDims(value)
-
-    private fun Random.quantityWithRandomDims(value: Number = 0) = Quantity(
-        currentDim = nextDouble(),
-        tempDim = nextDouble(),
-        timeDim = nextDouble(),
-        lengthDim = nextDouble(),
-        massDim = nextDouble(),
-        luminDim = nextDouble(),
-        moleDim = nextDouble(),
-        angleDim = nextDouble(),
-        value = value.toDouble()
-    )
 
     @Test
     fun `test plus`() {
@@ -341,6 +314,18 @@ internal class QuantityTest {
         )
     }
 
+    @ParameterizedTest
+    @MethodSource("minSource")
+    fun `test min`(a: Quantity, b: Quantity, expectedIndex: Int) {
+        assertEquals(if (expectedIndex == 0) a else b, min(a, b))
+    }
+
+    @ParameterizedTest
+    @MethodSource("maxSource")
+    fun `test max`(a: Quantity, b: Quantity, expectedIndex: Int) {
+        assertEquals(if (expectedIndex == 0) a else b, max(a, b))
+    }
+
     companion object {
 
         @Suppress("unused")
@@ -361,6 +346,54 @@ internal class QuantityTest {
             Arguments.of(0.1, -1, 1, -2, 2, 0.2),
             Arguments.of(-0.1, -1, 1, 2, -2, 0.2),
             Arguments.of(0, -1, 1, -5, 2, -1.5)
+        )
+
+        @Suppress("unused")
+        @JvmStatic
+        fun minSource() = listOf(
+            Arguments.of(quantityWithDims(0, 1), quantityWithDims(0, 2), 0),
+            Arguments.of(quantityWithDims(0, 2), quantityWithDims(0, 1), 1),
+            Arguments.of(quantityWithDims(0, 1.01), quantityWithDims(0, 1.02), 0),
+            Arguments.of(quantityWithDims(0, NaN), quantityWithDims(0, 1), 0),
+            Arguments.of(quantityWithDims(0, 0.0), quantityWithDims(0, 0.0), 0)
+        )
+
+        @Suppress("unused")
+        @JvmStatic
+        fun maxSource() = listOf(
+            Arguments.of(quantityWithDims(0, 1), quantityWithDims(0, 2), 1),
+            Arguments.of(quantityWithDims(0, 2), quantityWithDims(0, 1), 0),
+            Arguments.of(quantityWithDims(0, 1.01), quantityWithDims(0, 1.02), 1),
+            Arguments.of(quantityWithDims(0, NaN), quantityWithDims(0, 1), 0),
+            Arguments.of(quantityWithDims(0, 0.0), quantityWithDims(0, 0.0), 1)
+        )
+
+        private fun quantityWithDims(dim: Number, value: Number) = quantityWithDims({ dim }, value)
+
+        private fun quantityWithDims(dimGenerator: (Int) -> Number, value: Number) = Quantity(
+            currentDim = dimGenerator(1),
+            tempDim = dimGenerator(2),
+            timeDim = dimGenerator(3),
+            lengthDim = dimGenerator(4),
+            massDim = dimGenerator(5),
+            luminDim = dimGenerator(6),
+            moleDim = dimGenerator(7),
+            angleDim = dimGenerator(8),
+            value = value
+        )
+
+        private fun quantityWithRandomDims(value: Number = 0) = Random.Default.quantityWithRandomDims(value)
+
+        private fun Random.quantityWithRandomDims(value: Number = 0) = Quantity(
+            currentDim = nextDouble(),
+            tempDim = nextDouble(),
+            timeDim = nextDouble(),
+            lengthDim = nextDouble(),
+            massDim = nextDouble(),
+            luminDim = nextDouble(),
+            moleDim = nextDouble(),
+            angleDim = nextDouble(),
+            value = value.toDouble()
         )
     }
 }
