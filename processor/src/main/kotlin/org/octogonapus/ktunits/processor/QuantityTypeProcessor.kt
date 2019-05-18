@@ -442,8 +442,18 @@ class QuantityTypeProcessor : AbstractProcessor() {
 
     private fun Element.typeName() = asType().asTypeName()
 
-    private fun Element.enclosedCompanion() =
-        enclosedElements.first { it.simpleName.contentEquals("Companion") }
+    private fun Element.enclosedCompanion(): Element {
+        val companion = enclosedElements.firstOrNull { it.simpleName.contentEquals("Companion") }
+        return if (companion == null) {
+            val message = "Class ${asType().asTypeName()} needs a companion object declared, " +
+                "but does not have one."
+
+            printError(message)
+            throw IllegalStateException(message)
+        } else {
+            companion
+        }
+    }
 
     private fun buildFromFun(
         receiverElement: ElementWithDimensions
