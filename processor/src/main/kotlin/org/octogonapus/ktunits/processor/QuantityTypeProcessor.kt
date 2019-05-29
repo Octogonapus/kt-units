@@ -574,7 +574,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
                     ).build()
             )
             .build(),
-        PropertySpec.builder(conversionData.name, Number::class.asTypeName())
+        PropertySpec.builder(conversionData.name, Double::class.asTypeName())
             .receiver(conversionClass)
             .getter(
                 FunSpec.builder("get()")
