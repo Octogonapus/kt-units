@@ -10,7 +10,7 @@ apply {
 description = "Contains definitions of common quantities."
 
 dependencies {
-    implementation(project(":annotation"))
+    api(project(":annotation"))
     kapt(project(":processor"))
 }
 
