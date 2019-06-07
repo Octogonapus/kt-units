@@ -18,21 +18,12 @@ package org.octogonapus.ktunits.quantities
 
 import org.octogonapus.ktunits.annotation.Quantity
 import org.octogonapus.ktunits.annotation.QuantityBlacklist
-import org.octogonapus.ktunits.annotation.QuantityConversion
-import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
 
-@QuantityType(lengthDim = 2.0)
-@QuantityConversions(
-    QuantityConversion("sqMeter", 1.0),
-    QuantityConversion("sqInch", 6.452 * 1e-4),
-    QuantityConversion("sqCentimeter", 1e-4),
-    QuantityConversion("sqYard", 0.8361),
-    QuantityConversion("sqMile", 2.59 * 1e+6)
-)
+@QuantityType(timeDim = -2.0, massDim = 1.0)
 @QuantityBlacklist(Energy::class)
-data class Area(
+data class Stiffness(
     override val value: Double
-) : Quantity(lengthDim = 2.0, value = value) {
+) : Quantity(timeDim = -2.0, massDim = 1.0, value = value) {
     companion object
 }
