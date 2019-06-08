@@ -26,7 +26,7 @@ import org.octogonapus.ktunits.annotation.QuantityType
 @QuantityConversions(
     QuantityConversion("newton", 1.0),
     QuantityConversion("dyn", 1e-5),
-    QuantityConversion("kp", 9.80665),
+    QuantityConversion("kgf", 9.80665),
     QuantityConversion("lbF", 4.448222),
     QuantityConversion("pdl", 0.138255)
 )

@@ -54,7 +54,7 @@ internal class ForceTest {
         fun forceUnitsSource() = listOf(
             Arguments.of(1.newton, 1.newton),
             Arguments.of(1e-5.newton, 1.dyn),
-            Arguments.of(9.80665.newton, 1.kp),
+            Arguments.of(9.80665.newton, 1.kgf),
             Arguments.of(4.448222.newton, 1.lbF),
             Arguments.of(0.138255.newton, 1.pdl)
         )

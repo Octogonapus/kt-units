@@ -53,8 +53,8 @@ internal class TorqueTest {
         @JvmStatic
         fun torqueUnitsSource() = listOf(
             Arguments.of(1.nM, 1.nM),
-            Arguments.of(0.102.nM, 1.kgFM),
-            Arguments.of(0.09807.nM, 1.kgFCm),
+            Arguments.of(0.102.nM, 1.kgfM),
+            Arguments.of(0.09807.nM, 1.kgfCm),
             Arguments.of(0.7376.nM, 1.lbFFt),
             Arguments.of(0.113.nM, 1.lbFIn),
             Arguments.of((7.062 * 1e-3).nM, 1.ozFIn)

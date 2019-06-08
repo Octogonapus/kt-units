@@ -24,8 +24,8 @@ import org.octogonapus.ktunits.annotation.QuantityType
 @QuantityType(timeDim = -2.0, lengthDim = 2.0, massDim = 1.0)
 @QuantityConversions(
     QuantityConversion("nM", 1.0),
-    QuantityConversion("kgFM", 0.102),
-    QuantityConversion("kgFCm", 0.09807),
+    QuantityConversion("kgfM", 0.102),
+    QuantityConversion("kgfCm", 0.09807),
     QuantityConversion("lbFFt", 0.7376),
     QuantityConversion("lbFIn", 0.113),
     QuantityConversion("ozFIn", 7.062 * 1e-3)
