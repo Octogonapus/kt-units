@@ -160,6 +160,7 @@ class QuantityTypeProcessor : AbstractProcessor() {
             allFunctions.add(buildFromFun(ElementWithDimensions(element)))
             allFunctions.addAll(buildNumberMultiplyFuns(typeName))
             allFunctions.add(buildQuantityDivideNumberFun(typeName))
+            allFunctions.add(buildCompareToFun(typeName))
 
             val conversions = element.getAnnotation(QuantityConversions::class.java)
             val conversionFuns = conversions?.values?.flatMap {
@@ -601,6 +602,20 @@ class QuantityTypeProcessor : AbstractProcessor() {
             |return %T(toDouble() / other.value)
             """.trimMargin(),
             returnType
+        )
+        .build()
+
+    private fun buildCompareToFun(
+        type: TypeName
+    ) = FunSpec.builder("compareTo")
+        .addModifiers(KModifier.PUBLIC, KModifier.OPERATOR)
+        .receiver(type)
+        .returns(Int::class)
+        .addParameter("other", type)
+        .addStatement(
+            """
+            |return value.compareTo(other.value)
+            """.trimMargin()
         )
         .build()
 
