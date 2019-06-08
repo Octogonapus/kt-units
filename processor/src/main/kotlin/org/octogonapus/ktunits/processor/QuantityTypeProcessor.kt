@@ -50,7 +50,7 @@ import javax.tools.Diagnostic
 /**
  * Generates plus, minus, times, and div operators for all annotated quantities.
  */
-@SuppressWarnings("TooManyFunctions")
+@SuppressWarnings("TooManyFunctions", "StringLiteralDuplication")
 @AutoService(Processor::class)
 @SupportedSourceVersion(SourceVersion.RELEASE_8)
 @SupportedOptions(QuantityTypeProcessor.KAPT_KOTLIN_GENERATED_OPTION_NAME)
@@ -99,26 +99,33 @@ class QuantityTypeProcessor : AbstractProcessor() {
                 val blacklistedClasses = blacklists[it.a.typeName] ?: emptyList()
                 val blacklisted = blacklistedClasses.contains(returnType.element.asType())
 
-                // Generate operator functions for non-blacklisted return types
-                if (!blacklisted) {
-                    if (it.a.isMultiplyCompatible(it.b, returnType)) {
-                        allFunctions.add(buildMultiplyFun(it.a, it.b, returnType))
+                if (it.a.element.simpleName.contentEquals("Unitless")) {
+                    // unitless * x = x
+                    // Only emit something if the parameter and return type are equal (otherwise
+                    // the overload will be conflicting).
+                    if (it.b == returnType) {
+                        allFunctions += generateMultAndDivMethods(
+                            blacklisted,
+                            it.a,
+                            it.b,
+                            returnType
+                        )
                     }
-
-                    if (it.a.isDivideCompatible(it.b, returnType)) {
-                        allFunctions.add(buildDivideFun(it.a, it.b, returnType))
+                } else if (it.b.element.simpleName.contentEquals("Unitless")) {
+                    // x * unitless = x
+                    // Only emit something if the receiver and return type are equal (otherwise
+                    // the overload will be conflicting).
+                    if (it.a == returnType) {
+                        allFunctions += generateMultAndDivMethods(
+                            blacklisted,
+                            it.a,
+                            it.b,
+                            returnType
+                        )
                     }
-                }
-
-                // Generate non-operator functions for blacklisted return types
-                if (blacklisted) {
-                    if (it.a.isMultiplyCompatible(it.b, returnType)) {
-                        allFunctions.add(buildBlacklistedMultiplyFun(it.a, it.b, returnType))
-                    }
-
-                    if (it.a.isDivideCompatible(it.b, returnType)) {
-                        allFunctions.add(buildBlacklistedDivideFun(it.a, it.b, returnType))
-                    }
+                } else {
+                    // Otherwise there are no conflicts
+                    allFunctions += generateMultAndDivMethods(blacklisted, it.a, it.b, returnType)
                 }
             }
 
@@ -176,6 +183,47 @@ class QuantityTypeProcessor : AbstractProcessor() {
         fileSpecBuilder.build().writeTo(file)
 
         return false
+    }
+
+    /**
+     * Generates multiply and divide operator overloads (and handles blacklisted return types).
+     *
+     * @param blacklisted Whether the return type is blacklisted.
+     * @param receiver The receiver type.
+     * @param parameter The parameter type.
+     * @param returnType The return type.
+     */
+    private fun generateMultAndDivMethods(
+        blacklisted: Boolean,
+        receiver: ElementWithDimensions,
+        parameter: ElementWithDimensions,
+        returnType: ElementWithDimensions
+    ): List<FunSpec> {
+        val functions = mutableListOf<FunSpec>()
+
+        // Generate operator functions for non-blacklisted return types
+        if (!blacklisted) {
+            if (receiver.isMultiplyCompatible(parameter, returnType)) {
+                functions.add(buildMultiplyFun(receiver, parameter, returnType))
+            }
+
+            if (receiver.isDivideCompatible(parameter, returnType)) {
+                functions.add(buildDivideFun(receiver, parameter, returnType))
+            }
+        }
+
+        // Generate non-operator functions for blacklisted return types
+        if (blacklisted) {
+            if (receiver.isMultiplyCompatible(parameter, returnType)) {
+                functions.add(buildBlacklistedMultiplyFun(receiver, parameter, returnType))
+            }
+
+            if (receiver.isDivideCompatible(parameter, returnType)) {
+                functions.add(buildBlacklistedDivideFun(receiver, parameter, returnType))
+            }
+        }
+
+        return functions
     }
 
     private fun validateAnnotatedClasses(classes: Set<Element>): Set<Element> {
