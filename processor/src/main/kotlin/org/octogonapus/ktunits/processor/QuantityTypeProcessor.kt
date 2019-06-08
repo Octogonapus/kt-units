@@ -148,6 +148,8 @@ class QuantityTypeProcessor : AbstractProcessor() {
 
         annotatedTypeClasses.forEach { element ->
             val typeName = element.asType().asTypeName()
+            allFunctions.add(buildUnaryPlusFun(typeName))
+            allFunctions.add(buildUnaryMinusFun(typeName))
             allFunctions.add(buildPlusFun(typeName))
             allFunctions.add(buildMinusFun(typeName))
             allFunctions.add(buildCeilFun(typeName))
@@ -297,6 +299,25 @@ class QuantityTypeProcessor : AbstractProcessor() {
         '/',
         false
     )
+
+    private fun buildUnaryPlusFun(
+        type: TypeName
+    ) = buildUnaryPlusOrMinusFun(type, "unaryPlus", '+')
+
+    private fun buildUnaryMinusFun(
+        type: TypeName
+    ) = buildUnaryPlusOrMinusFun(type, "unaryMinus", '-')
+
+    private fun buildUnaryPlusOrMinusFun(type: TypeName, name: String, op: Char) =
+        FunSpec.builder(name)
+            .addModifiers(KModifier.PUBLIC, KModifier.OPERATOR)
+            .receiver(type)
+            .returns(type)
+            .addStatement(
+                "return %T(${op}value)",
+                type
+            )
+            .build()
 
     private fun buildPlusFun(
         type: TypeName
