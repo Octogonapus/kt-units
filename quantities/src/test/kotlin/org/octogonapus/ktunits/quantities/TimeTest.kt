@@ -59,7 +59,9 @@ internal class TimeTest {
             Arguments.of(1e-2.second, 1.centisecond),
             Arguments.of(1e-3.second, 1.millisecond),
             Arguments.of(1e-6.second, 1.microsecond),
-            Arguments.of(1e-9.second, 1.nanosecond)
+            Arguments.of(1e-9.second, 1.nanosecond),
+            Arguments.of(3600.second, 1.hour),
+            Arguments.of(60.second, 1.minute)
         )
     }
 }
