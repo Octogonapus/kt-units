@@ -34,7 +34,9 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("centisecond", 1e-2),
     QuantityConversion("millisecond", 1e-3),
     QuantityConversion("microsecond", 1e-6),
-    QuantityConversion("nanosecond", 1e-9)
+    QuantityConversion("nanosecond", 1e-9),
+    QuantityConversion("hour", 3600.0),
+    QuantityConversion("minute", 60.0)
 )
 @QuantityBlacklist(Torque::class)
 data class Time(
