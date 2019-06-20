@@ -23,6 +23,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 import org.octogonapus.ktunits.annotation.Quantity
+import kotlin.math.PI
 
 internal class AngularVelocityTest {
 
@@ -54,7 +55,10 @@ internal class AngularVelocityTest {
             Arguments.of(2.778e-4.radianPerSecond, 1.radianPerHour),
             Arguments.of(0.01745.radianPerSecond, 1.degreePerSecond),
             Arguments.of(2.909e-4.radianPerSecond, 1.degreePerMinute),
-            Arguments.of(4.848e-6.radianPerSecond, 1.degreePerHour)
+            Arguments.of(4.848e-6.radianPerSecond, 1.degreePerHour),
+            Arguments.of((PI * 2).radianPerSecond, 1.revolutionPerSecond),
+            Arguments.of((PI * 2 / 60.0).radianPerSecond, 1.revolutionPerMinute),
+            Arguments.of((PI * 2 / 3600.0).radianPerSecond, 1.revolutionPerHour)
         )
     }
 }
