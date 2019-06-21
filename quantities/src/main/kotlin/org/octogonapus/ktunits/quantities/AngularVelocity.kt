@@ -20,6 +20,7 @@ import org.octogonapus.ktunits.annotation.Quantity
 import org.octogonapus.ktunits.annotation.QuantityConversion
 import org.octogonapus.ktunits.annotation.QuantityConversions
 import org.octogonapus.ktunits.annotation.QuantityType
+import kotlin.math.PI
 
 @QuantityType(timeDim = -1.0, angleDim = 1.0)
 @QuantityConversions(
@@ -28,7 +29,10 @@ import org.octogonapus.ktunits.annotation.QuantityType
     QuantityConversion("radianPerHour", 2.778e-4),
     QuantityConversion("degreePerSecond", 0.01745),
     QuantityConversion("degreePerMinute", 2.909e-4),
-    QuantityConversion("degreePerHour", 4.848e-6)
+    QuantityConversion("degreePerHour", 4.848e-6),
+    QuantityConversion("revolutionPerSecond", PI * 2),
+    QuantityConversion("revolutionPerMinute", PI * 2 / 60.0),
+    QuantityConversion("revolutionPerHour", PI * 2 / 3600.0)
 )
 data class AngularVelocity(
     override val value: Double
